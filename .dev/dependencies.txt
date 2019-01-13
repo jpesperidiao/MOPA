@@ -1,0 +1,4 @@
+gdal
+PyQt5
+Numpy
+MatPlotLib
