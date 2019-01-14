@@ -23,7 +23,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
+from mpl_toolkits.mplot3d import Axes3D
 from PyQt5.QtCore import QObject
 
 class Terrain(QObject):
@@ -45,8 +47,8 @@ class Terrain(QObject):
             'finalCol' : 1000,
             'initialRow' : 0,
             'finalRow' : 1000,
-            'cmap' : cm.Oranges,
-            'lineWidth' : 0,
+            'cmap' : cm.YlGnBu,
+            'linewidth' : 0,
             'antialiased' : False,
             'shrink' : .5,
             'aspect' : 5,
@@ -63,7 +65,7 @@ class Terrain(QObject):
         if parameters is None:
             parameters = self.defaultPlottingParameters()
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = Axes3D(fig)
         Z = elevation[
                 parameters['initialCol']:parameters['finalCol'],\
                 parameters['initialRow']:parameters['finalRow']
@@ -79,7 +81,7 @@ class Terrain(QObject):
         ax.zaxis.set_major_locator(LinearLocator(10))
         ax.zaxis.set_major_formatter(FormatStrFormatter('%.08f'))    
         if points is not None:
-            #ax.scatter(vet[:,0], vet[:,1], vet[:,4], c='blue'); # plotagem dos pontos possiveis para o atirador
+            #ax.scatter(vet[:,0], vet[:,1], vet[:,4], c='blue')
             ax.scatter(points[:,0], points[:,1], points[:,4], c='cyan')
 
         ax.set_xlabel(self.tr('Column'))
