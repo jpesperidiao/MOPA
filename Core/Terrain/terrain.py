@@ -47,7 +47,7 @@ class Terrain(QObject):
             'finalCol' : 1000,
             'initialRow' : 0,
             'finalRow' : 1000,
-            'cmap' : cm.YlGnBu,
+            'cmap' : cm.gist_earth,
             'linewidth' : 0,
             'antialiased' : False,
             'shrink' : .5,
@@ -55,10 +55,10 @@ class Terrain(QObject):
             'alpha' : .0
         }
 
-    def plotter(self, elevation, points=None, parameters=None):
+    def plotter(self, raster, points=None, parameters=None):
         """
         Generates a 3D plotting object.
-        :param elevation: (Numpy.ndarray) terrain's elevation band as a numpy array.
+        :param raster: (RasterLayer) terrain's DEM raster.
         :param points: (list-of-Numpy.ndarray) list of points to be plotted over the terrain.
         :param parameters: (dict) plotting parameters.
         """
@@ -66,6 +66,8 @@ class Terrain(QObject):
             parameters = self.defaultPlottingParameters()
         fig = plt.figure()
         ax = Axes3D(fig)
+        ax.set_title(self.tr('Visualization from {0}').format(raster.name()))
+        elevation = raster.bands()
         Z = elevation[
                 parameters['initialCol']:parameters['finalCol'],\
                 parameters['initialRow']:parameters['finalRow']
@@ -79,7 +81,7 @@ class Terrain(QObject):
         fig.colorbar(surf, shrink=parameters['shrink'], aspect=parameters['aspect'], alpha=parameters['alpha'])
             
         ax.zaxis.set_major_locator(LinearLocator(10))
-        ax.zaxis.set_major_formatter(FormatStrFormatter('%.08f'))    
+        ax.zaxis.set_major_formatter(FormatStrFormatter('%.2f'))    
         if points is not None:
             #ax.scatter(vet[:,0], vet[:,1], vet[:,4], c='blue')
             ax.scatter(points[:,0], points[:,1], points[:,4], c='cyan')
