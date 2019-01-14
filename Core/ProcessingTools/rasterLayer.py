@@ -65,19 +65,26 @@ class RasterLayer(object):
         """
         return None if self.dataset() is None else self.dataset().ReadAsArray()
 
+    def bandCount(self):
+        """
+        Gets the number of bands on raster.
+        :return: (int) 
+        """
+        return self.dataset().RasterCount if self.dataset() is not None else 0
+
     def width(self):
         """
         Gets raster X length (raster's width).
         :return: (int) raster's width.
         """
-        return len(self.bands()[0]) if self.dataset() is not None else 0
+        return self.dataset().RasterXSize if self.dataset() is not None else 0
 
     def height(self):
         """
         Gets raster X length (raster's height).
         :return: (int) raster's height.
         """
-        return len(self.bands()) if self.dataset() is not None else 0
+        return self.dataset().RasterYSize if self.dataset() is not None else 0
 
     def epsg(self):
         """
