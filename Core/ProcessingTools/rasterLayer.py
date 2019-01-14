@@ -151,7 +151,7 @@ class RasterLayer(object):
         except:
             return 0
 
-    def pixelCoordinates(self, col, lin, gt=None):
+    def pixelToCoordinates(self, col, lin, gt=None):
         """
         Gets the coordinates of a given pixel. It is considered pixel center.
         :param col: (int) pixel column.
@@ -167,7 +167,7 @@ class RasterLayer(object):
         coordX = gt[0] + (col + 0.5)*gt[1] + (lin + 0.5)*gt[2]
         return (coordY, coordX)
 
-    def pixelFromCoordinates(self, yValue, xValue, gt=None):
+    def coordinatesToPixel(self, yValue, xValue, gt=None):
         """
         Gets pixel column and line from its coordinates. Returns (-1, -1), if coordinates are out of bounds.
         :param xValue: (float) x coordinate (may be lat/long, meters or whatever).
@@ -182,8 +182,8 @@ class RasterLayer(object):
         denominator = 1 / denominator
         x = xValue - gt[0]
         y = yValue - gt[3]
-        col = int((gt[5] * x - gt[2] * y) * denominator - 0.5)
+        col = int((gt[5] * x - gt[2] * y) * denominator)
         col = col if col <= self.height() else -1
-        lin = int((-1 * gt[4] * x + gt[1] * y) * denominator - 0.5)
+        lin = int((-1 * gt[4] * x + gt[1] * y) * denominator)
         lin = lin if lin <= self.width() else -1
         return (col, lin)
