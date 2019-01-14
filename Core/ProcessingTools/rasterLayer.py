@@ -122,6 +122,9 @@ class RasterLayer(object):
     def spatialResolution(self):
         """
         Gets raster's spatial resolution. For geographic coordinates an aproximation is used.
+        Considering the aproximations used, it is highly counter-recommended to use rasters using geographical
+        coordinate systems.
+        :return: (int) raster's spatial resolution in meters (cell size).
         """
         try:
             pxWidth = abs(self.getGeoTransformParam()[1])
@@ -147,3 +150,40 @@ class RasterLayer(object):
                             return reso
         except:
             return 0
+
+    def pixelCoordinates(self, col, lin, gt=None):
+        """
+        Gets the coordinates of a given pixel. It is considered pixel center.
+        :param col: (int) pixel column.
+        :param lin: (int) pixel line.
+        :param gt: (list-of-float) dataset's geotransformation parameters.
+        :return: (tuple-of-float) X and Y coordinates (may be in meters/degrees/etc, defined by entry)
+        """
+        if col > self.height() or lin > self.width():
+            return (.0, .0)
+        if gt is None:
+            gt = self.getGeoTransformParam()
+        coordY = gt[3] + (col + 0.5)*gt[4] + (lin + 0.5)*gt[5] 
+        coordX = gt[0] + (col + 0.5)*gt[1] + (lin + 0.5)*gt[2]
+        return (coordY, coordX)
+
+    def pixelFromCoordinates(self, yValue, xValue, gt=None):
+        """
+        Gets pixel column and line from its coordinates. Returns (-1, -1), if coordinates are out of bounds.
+        :param xValue: (float) x coordinate (may be lat/long, meters or whatever).
+        :param yValue: (float) y coordinate (may be lat/long, meters or whatever).
+        :return: (tuple-of-int) column and line for given coordinates.
+        """
+        if gt is None:
+            gt = self.getGeoTransformParam()
+        denominator = gt[1] * gt[5] - gt[2] * gt[4]
+        if denominator == 0.:
+            return (-1, -1)
+        denominator = 1 / denominator
+        x = xValue - gt[0]
+        y = yValue - gt[3]
+        col = int((gt[5] * x - gt[2] * y) * denominator - 0.5)
+        col = col if col <= self.height() else -1
+        lin = int((-1 * gt[4] * x + gt[1] * y) * denominator - 0.5)
+        lin = lin if lin <= self.width() else -1
+        return (col, lin)
