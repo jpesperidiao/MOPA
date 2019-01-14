@@ -63,7 +63,7 @@ class RasterLayer(object):
         Gets raster bands as Numpy array.
         :return: (Numpy.ndarray) raster's bands.
         """
-        return None if self.dataset() is None else self.dataset().ReadAsArray()
+        return np.array([[]]) if self.dataset() is None else self.dataset().ReadAsArray()
 
     def bandCount(self):
         """
