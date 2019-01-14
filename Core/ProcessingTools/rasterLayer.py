@@ -30,7 +30,7 @@ class RasterLayer(object):
     def __init__(self, path=None):
         """
         Class constructor.
-        :param: (str) path to raster file.
+        :param path: (str) path to raster file.
         """
         super(RasterLayer, self).__init__()
         self.gdalDataset = self.getGdalDataset(path)
@@ -124,7 +124,7 @@ class RasterLayer(object):
         Gets raster's spatial resolution. For geographic coordinates an aproximation is used.
         Considering the aproximations used, it is highly counter-recommended to use rasters using geographical
         coordinate systems.
-        :return: (int) raster's spatial resolution in meters (cell size).
+        :return: (float) raster's spatial resolution in meters (cell size).
         """
         try:
             pxWidth = abs(self.getGeoTransformParam()[1])
