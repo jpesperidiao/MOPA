@@ -21,7 +21,24 @@
  ***************************************************************************/
 """
 
-class Enums:
-    # database drivers enumerates
-    TotalDatabaseDrivers = 1
-    NoDatabase, SQLite3 = list(range(TotalDatabaseDrivers + 1))
+class AbstractSqlGenerator():
+    def __init__(self):
+        pass
+
+    def createObservations(self):
+        """
+        Creates the observations (shooting events) table.
+        """
+        return ""
+    
+    def createSensors(self):
+        """
+        Creates the sensors (sensors positions and working info) table.
+        """
+        return ""
+
+    def allTables(self):
+        """
+        Get all available tables from database.
+        """
+        return ""

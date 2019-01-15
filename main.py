@@ -25,13 +25,24 @@ import os
 
 from Core.ProcessingTools.rasterLayer import RasterLayer
 from Core.Terrain.terrain import Terrain
+from Core.DatabaseTools.DatabaseManager.SupportedDrivers.sqliteDatabase import SqliteDatabase
+from Settings.settings import Settings
 
-path = os.path.join(
-              os.path.dirname(__file__), '.dev', 'testing_data',
-              'ASTGTM2_N39W096', 'ASTGTM2_N39W096_num.tif'
-       )
 
-rl = RasterLayer(path)
-t = Terrain()
-t.mayaviPlotter(rl)
-print(t)
+# path = os.path.join(
+#               os.path.dirname(__file__), '.dev', 'testing_data',
+#               'ASTGTM2_N39W096', 'ASTGTM2_N39W096_dem.tif'
+#        )
+
+# rl = RasterLayer(path)
+# t = Terrain()
+# t.mayaviPlotter(rl)
+# print(t)
+
+# param = {'path' : '/Users/Joao/Desktop/teste.sqlite'}
+# db = SqliteDatabase(param)
+# db.gen.createTable("teste", {'id' : 'INTEGER', 'name' : 'TEXT'}, pk='id')
+# print(db.driver(), db.isConnected())
+
+settings = Settings()
+settings.check()
