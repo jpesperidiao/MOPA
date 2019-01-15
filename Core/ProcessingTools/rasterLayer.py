@@ -51,6 +51,15 @@ class RasterLayer(object):
         """
         return gdal.Open(path) if path is not None else None
 
+    def setRaster(self, path):
+        """
+        Resets layer to new raster path.
+        :param path: (str) new raster path.
+        """
+        if self.dataset() is not None:
+            del self.gdalDataset
+            self.gdalDataset = self.getGdalDataset(path)
+
     def dataset(self):
         """
         Gets current GDAL dataset loaded to object.
