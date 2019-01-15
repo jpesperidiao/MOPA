@@ -21,16 +21,17 @@
  ***************************************************************************/
 """
 
+import os
+
 from Core.ProcessingTools.rasterLayer import RasterLayer
 from Core.Terrain.terrain import Terrain
 
-path = '/Users/Joao/Documents/Projetos/MOPA/.dev/testing_data/ASTGTM2_N39W096/ASTGTM2_N39W096_num.tif'
+path = os.path.join(
+              os.path.dirname(__file__), '.dev', 'testing_data',
+              'ASTGTM2_N39W096', 'ASTGTM2_N39W096_num.tif'
+       )
+
 rl = RasterLayer(path)
 t = Terrain()
-param = t.defaultPlottingParameters()
-param['initialRow'] = 1000
-param['finalRow'] = 1500
-param['initialCol'] = 1000
-param['finalCol'] = 1500
-t.plotter(rl, parameters=param)
+t.mayaviPlotter(rl)
 print(t)

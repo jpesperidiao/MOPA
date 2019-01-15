@@ -1,4 +1,5 @@
 gdal
 PyQt5
 Numpy
-MatPlotLib
+MatPlotLib # may be changed to mayavi
+Mayavi

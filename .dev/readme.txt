@@ -1,4 +1,4 @@
-Folder to accommodate dev tools for M.O.P.A.
+Folder to accommodate dev tools for MOPA
 
 ./venv/ - dir:
 Contains a Python3 virtual environment

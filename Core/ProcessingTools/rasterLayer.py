@@ -86,6 +86,13 @@ class RasterLayer(object):
         """
         return self.dataset().RasterYSize if self.dataset() is not None else 0
 
+    def isValid(self):
+        """
+        Gets current raster file selection's validity status.
+        :return: (bool) validity status.
+        """
+        return self.width() != 0 and self.height() != 0
+
     def epsg(self):
         """
         Gets raster's EPSG authentication ID.
