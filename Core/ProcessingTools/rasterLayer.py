@@ -58,7 +58,8 @@ class RasterLayer(object):
         """
         if self.dataset() is not None:
             del self.gdalDataset
-            self.gdalDataset = self.getGdalDataset(path)
+        self.directory = path
+        self.gdalDataset = self.getGdalDataset(path)
 
     def dataset(self):
         """
@@ -203,3 +204,43 @@ class RasterLayer(object):
         lin = int((-1 * gt[4] * x + gt[1] * y) * denominator)
         lin = lin if lin <= self.width() else -1
         return (col, lin)
+
+    def extents(self):
+        """
+        Gets raster's bounding box. The order is: minimum X, maximum X, minimum Y and maximum Y.
+        :return: (tuple-of-floats) raster's extents.
+        """
+        if self.isValid():
+            xMin, dx, rotX, yMax, rotY, dy = self.getGeoTransformParam()
+            xMax = xMin + dx * self.width() + rotX * self.height()
+            yMin = yMax + dy * self.height() + rotY * self.width()
+            return xMin, xMax, yMin, yMax
+        else:
+            return [0., 0., 0., 0.]
+
+    def hasPoint(self, coordinates):
+        """
+        Checks if a point (tuple of coordinates) is contained by rasters extents.
+        :param coordinate: (tuple-of-floats) coordinates from point to be checked.
+        :return: (bool) whether points is inside raster's area.
+        """
+        if not self.isValid():
+            return False
+        xMin, xMax, yMin, yMax = self.extents()
+        # Z is optional.
+        y, x = coordinates[0], coordinates[1]
+        return (x >= xMin and x <= xMax) and (y >= yMin and y <= yMax)
+
+    def rasterValueFromPoint(self, coordinates):
+        """
+        Requests raster's value from a point.
+        :param coordinate: (tuple-of-floats) coordinates from point to be checked.
+        :return: (list-of-float) whether points is inside raster's area.
+        """
+        if not (self.isValid() and self.hasPoint(coordinates)):
+            return []
+        col, lin = self.coordinatesToPixel(coordinates[0], coordinates[1])
+        if self.bandCount() > 1:
+            return [band[lin][col] for band in self.bands()]
+        else:
+            return [self.bands()[lin][col]]

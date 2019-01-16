@@ -95,10 +95,11 @@ class Terrain(QObject):
     #     plt.show()
     #     return fig
 
-    def mayaviPlotter(self, raster):
+    def mayaviPlotter(self, raster, title=None):
         """
         Creates a 3D view from a raster using Mayavi lib.
         :param raster: (RasterLayer) terrain's DEM raster.
+        :param title: (str) title for Scene window.
         """
         # obs.: mayavi interfered on matplotlib's execution (it crashed big time)
         if raster.bandCount() != 1:
@@ -107,6 +108,9 @@ class Terrain(QObject):
         x = np.arange(0, raster.width())
         y = np.arange(0, raster.height())
         x, y = np.meshgrid(x, y)
+        if title is None:
+            title = self.tr("Visualization of {0}").format(raster.name())
+        mlab.figure(title)
         mlab.mesh(x, y, dem)
         mlab.show()
         return

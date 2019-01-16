@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-12-21
+        begin                : 2018-01-15
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow, FORMCLASS):
               dem = fd.getOpenFileName(caption=self.tr('Select a DEM raster'), filter=self.tr("Raster (*.png *.tif *.tiff)"))
               dem = dem[0] if isinstance(dem, tuple) else dem
               if dem != "":
-                     self.raster = RasterLayer(dem)
+                     self.raster.setRaster(dem)
                      title = self.tr("Visualization of {0}").format(self.raster.name())
                      self.groupBox.setTitle(title)
 

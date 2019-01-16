@@ -95,3 +95,30 @@ class Settings(object):
         res = True
         res = res and self.setupDatabases()
         return res
+
+    def addSensor(self, coordinates, epsg, status):
+        """
+        Add a new sensor to the database.
+        :param coordinates: (tuple-of-floats) tuple with sensor's coordinates.
+        :param epsg: (int) CRS authentication ID.
+        :param status: (bool) sensor's activation status.
+        """
+        # TODO
+        pass
+
+    def getSensor(sensorId):
+        """
+        Gets a sensor info from database using its ID.
+        :param sensorId: (int) sensor ID.
+        :return: (tuple-of-values) sensor's information.
+        """
+        # TODO
+        pass
+
+    def sensorsItems(self):
+        """
+        Gets all info form all sensors in the database.
+        :return: (list-of-tuples) all sensors' informations.
+        """
+        # TODO
+        pass
