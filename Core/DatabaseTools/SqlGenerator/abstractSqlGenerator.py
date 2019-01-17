@@ -42,3 +42,31 @@ class AbstractSqlGenerator():
         Get all available tables from database.
         """
         return ""
+
+    def allSensors(self):
+        """
+        Gets all sensors from database.
+        """
+        return ""
+
+    def getSensor(self, sensorId):
+        """
+        Gets a sensor using its ID.
+        :param sensorId: (int) sensor's ID.
+        """
+        return ""
+
+    def addSensor(self, coordinates, epsg, status=True):
+        """
+        Adds a sensor to the database.
+        :param coordinates: (tuple-of-float) new sensor's coordinates.
+        :param epsg: (int) auth id for coordinates' CRS.
+        :param status: (bool) sensor's activation status.
+        """
+        return ""
+
+    def allObservations(self):
+        """
+        Gets all observations from database.
+        """
+        return ""

@@ -75,7 +75,7 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
             sensor INTEGER NOT NULL,
             date TIMESTAMP,
             FOREIGN KEY(sensor) REFERENCES sensors(id)
-        )
+        );
         """
 
     def createSensors(self):
@@ -90,7 +90,7 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
             activation_date TIMESTAMP,
             deactivation_date TIMESTAMP,
             status BOOLEAN
-        )
+        );
         """
 
     def allTables(self):
@@ -98,3 +98,34 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         Gets all available tables in the database.
         """
         return "SELECT tbl_name FROM sqlite_master;"
+
+    def allSensors(self):
+        """
+        Gets all sensors from database.
+        """
+        return "SELECT * FROM sensors;"
+
+    def allObservations(self):
+        """
+        Gets all observations from database.
+        """
+        return "SELECT * FROM observations;"
+
+    def addSensor(self, coordinates, epsg, status=True):
+        """
+        Adds a sensor to the database.
+        :param coordinates: (tuple-of-float) new sensor's coordinates.
+        :param epsg: (int) auth id for coordinates' CRS.
+        :param status: (bool) sensor's activation status.
+        """
+        return """\
+        INSERT INTO sensors (coordinates, epsg, activation_date, status)
+        VALUES ('{coord}', {epsg}, date('now'), {status});
+        """.format(coord=",".join(map(str, coordinates)), epsg=epsg, status=int(status))
+
+    def getSensor(self, sensorId):
+        """
+        Gets a sensor using its ID.
+        :param sensorId: (int) sensor's ID.
+        """
+        return "SELECT * FROM sensors WHERE id = {0};".format(sensorId)

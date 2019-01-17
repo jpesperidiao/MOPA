@@ -103,22 +103,19 @@ class Settings(object):
         :param epsg: (int) CRS authentication ID.
         :param status: (bool) sensor's activation status.
         """
-        # TODO
-        pass
+        self.settingsDb.addSensor(coordinates, epsg, status)
 
-    def getSensor(sensorId):
+    def getSensor(self, sensorId):
         """
         Gets a sensor info from database using its ID.
         :param sensorId: (int) sensor ID.
         :return: (tuple-of-values) sensor's information.
         """
-        # TODO
-        pass
+        return self.settingsDb.getSensor(sensorId)
 
     def sensorsItems(self):
         """
         Gets all info form all sensors in the database.
         :return: (list-of-tuples) all sensors' informations.
         """
-        # TODO
-        pass
+        return self.settingsDb.allSensors()

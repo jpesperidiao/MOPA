@@ -42,7 +42,21 @@ class SensorsManager():
         :param sensorId: (int) sensor ID.
         :return: (Sensor) sensor object.
         """
-        self.settings.getSensor(sensorId)
+        param = dict()
+        info = self.settings.getSensor(sensorId)
+        if info != tuple():
+            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['deactivation_date'], param['status'] = info
+            param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
+            param['status'] = bool(param['status'])
+        return Sensor(param)
+
+    def getNewSensor(self):
+        """
+        Gets a fresh and empty insance of a sensor.
+        :return: (Sensor) new sensor.
+        """
+        return Sensor({})
 
     def addSensor(self, coordinates, epsg, status=True):
         """
@@ -63,17 +77,35 @@ class SensorsManager():
         """
         return raster.hasPoint(sensor['coordinates'])
 
-    def availableSensors(self):
+    def allSensors(self):
         """
         Get all available sensors from database.
-        :return: (list-of-Sensors) all sensors.
+        :return: (dict-of-Sensors) all sensors mapped by sensor ID.
         """
-        sensors = []
+        sensors = dict()
         for item in self.settings.sensorsItems():
             param = dict()
             param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
             param['deactivation_date'], param['status'] = item
-            sensors.append(Sensor(param))
+            param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
+            param['status'] = bool(param['status'])
+            sensors[param['id']] = Sensor(param)
+        return sensors
+
+    def availableSensors(self):
+        """
+        Get all available sensors from database.
+        :return: (dict-of-Sensors) all sensors mapped by sensor ID.
+        """
+        sensors = dict()
+        for item in self.settings.sensorsItems():
+            param = dict()
+            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['deactivation_date'], param['status'] = item
+            param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
+            param['status'] = bool(param['status'])
+            if param['status']:
+                sensors[param['id']] = Sensor(param)
         return sensors
 
     def getSensorsInsideRaster(self, raster):
@@ -84,11 +116,17 @@ class SensorsManager():
         """
         if not raster.isValid():
             return []
-        sensors = []
+        sensors = dict()
         epsg = raster.epsg()
-        for sensor in self.availableSensors():
-            if sensor['epsg'] != epsg:
+        for item in self.settings.sensorsItems():
+            param = dict()
+            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['deactivation_date'], param['status'] = item
+            param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
+            param['status'] = bool(param['status'])
+            if param ['epsg'] != epsg:
+                # for now, just ignore, later reprojection should be applied
                 continue
-            elif raster.hasPoint(sensor['coordinates']):
-                sensors.append(sensor)
+            elif raster.hasPoint(param['coordinates']):
+                sensors[param['id']] = Sensor(param)
         return sensors

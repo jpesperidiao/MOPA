@@ -139,5 +139,37 @@ class AbstractDatabase(QObject):
         :return: (list-of-str) list of names from available tables.
         """
         if self.isConnected():
-            return self.query(self.gen.allTables())
+            return [t[0] for t in self.query(self.gen.allTables())]
         return []
+
+    def allSensors(self):
+        """
+        A list of all sensor's information present at the database.
+        :return: (list-of-tuple) sensors' informations.
+        """
+        if self.isConnected():
+            return self.query(self.gen.allSensors())
+        return []
+
+    def getSensor(self, sensorId):
+        """
+        Gets a sensor using its ID.
+        :param sensorId: (int) sensor's ID.
+        :return: (tuple) sensor's informations, if it exists.
+        """
+        if self.isConnected():
+            sensorL = self.query(self.gen.getSensor(sensorId))
+            return sensorL[0] if len(sensorL) > 0 else tuple()
+        return tuple()
+
+    def addSensor(self, coordinates, epsg, status=True, commit=True):
+        """
+        Gets a sensor using its ID.
+        :param coordinates: (tuple-of-float) sensor's coordinates.
+        :param epsg: (int) sensor's CRS auth id.
+        :param status: (bool) working status.
+        :param commit: (bool) commit addition to database.
+        """
+        if self.isConnected():
+            return self.query(self.gen.addSensor(coordinates, epsg, status), commit)
+        return 

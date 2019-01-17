@@ -44,8 +44,16 @@ class Sensor(QObject):
     def __getitem__(self, key):
         """
         Makes sensor object work as a dict towards its parametric attributes.
+        :param key: (str) attribute name.
+        :return: attribute value.
         """
         return self.parameters[key] if key in self.parameters else None
+
+    def __str__(self):
+        """
+        When print is called, parameters will be exposed.
+        """
+        return str(self.parameters)
 
     def invalidationReason(self, parameters):
         """
@@ -60,10 +68,12 @@ class Sensor(QObject):
         if 'coordinates' not in parameters or type(parameters['coordinates']) not in (list, tuple)\
             or not sum([type(coordinate) in (int, float) for coordinate in parameters['coordinates']]):
             return self.tr("Invalid coordinates.")
-        if 'activation_date' not in parameters or not isinstance(parameters['activation_date'], str):
+        if 'activation_date' not in parameters or \
+                type(parameters['activation_date']) not in (type(None), str):
             return self.tr("Invalid activation date.")
-        if 'deactivation_date' not in parameters or not isinstance(parameters['deactivation_date'], str):
-            return self.tr("Invalid activation date.")
+        if 'deactivation_date' not in parameters or \
+                type(parameters['deactivation_date']) not in (type(None), str):
+            return self.tr("Invalid deactivation date.")
         if 'status' not in parameters or not isinstance(parameters['status'], bool):
             return self.tr("Invalid status.")
         return ""
