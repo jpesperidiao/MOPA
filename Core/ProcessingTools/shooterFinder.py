@@ -61,7 +61,8 @@ class ShooterFinder():
         return {
             'plTol' : 0.05 * spatialResolution, # planimetric tolerance
             'alTol' : 0.01 * spatialResolution, # altimetric tolerance
-            'angTol' : 5. # angular tolerance
+            'angTol' : 1.5, # angular tolerance
+            'maxDistance' : 1000. # maximum shooting's distance from sensor
         }
 
     def findShooter(self, method, sensor, obs, dem, parameters=None):
