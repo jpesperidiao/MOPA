@@ -129,3 +129,17 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         :param sensorId: (int) sensor's ID.
         """
         return "SELECT * FROM sensors WHERE id = {0};".format(sensorId)
+        
+    def createShootersTable(self, viewName):
+        """
+        Creates the shooters' table.
+        :para viewName: (str) shooters' table name (default from settings).
+        """
+        return ""
+
+    def dropShootersTable(self, viewName):
+        """
+        Drops shooters' table.
+        :para viewName: (str) shooters' table name (default from settings).
+        """
+        return ""

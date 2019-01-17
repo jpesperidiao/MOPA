@@ -92,9 +92,7 @@ class Settings(object):
         """
         Sets up initial configurations.
         """
-        res = True
-        res = res and self.setupDatabases()
-        return res
+        return self.setupDatabases()
 
     def addSensor(self, coordinates, epsg, status):
         """
@@ -119,3 +117,21 @@ class Settings(object):
         :return: (list-of-tuples) all sensors' informations.
         """
         return self.settingsDb.allSensors()
+
+    def shootersTableName(self):
+        """
+        Gets default shooters table view name.
+        :return: (str) view's name.
+        """
+        return 'view_shooters'
+
+    def clearShootersView(self):
+        """
+        Clear shooters' table view. Creates it if it doesn't exist.
+        :return: (bool) table status.
+        """
+        shootersTable = self.shootersTableName()
+        if self.settingsDb.tableExists(shootersTable):
+            self.settingsDb.dropView(shootersTable)
+        self.settingsDb.createShootersTable(shootersTable)
+        return self.settingsDb.tableExists(shootersTable)

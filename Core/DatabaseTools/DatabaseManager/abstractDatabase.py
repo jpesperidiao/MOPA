@@ -173,3 +173,31 @@ class AbstractDatabase(QObject):
         if self.isConnected():
             return self.query(self.gen.addSensor(coordinates, epsg, status), commit)
         return 
+
+    def createShootersTable(self, viewName, commit=True):
+        """
+        Creates the shooters' table. Method should be invoked from settings module.
+        :para viewName: (str) shooters' table name (default from settings).
+        :param commit: (bool) commit table creation to the database.
+        """
+        if self.isConnected():
+            return self.query(self.gen.createShootersTable(viewName), commit)
+        return
+
+    def dropShootersTable(self, viewName, commit=True):
+        """
+        Drops shooters' table. Method should be invoked from settings module.
+        :para viewName: (str) shooters' table name (default from settings).
+        :param commit: (bool) commit table creation to the database.
+        """
+        if self.isConnected():
+            return self.query(self.gen.dropShootersTable(viewName), commit)
+        return
+
+    def tableExists(self, tablename):
+        """
+        Verifies if table exists into database.
+        :param tablename: (str) table's name.
+        :return: (bool) whether table exists.
+        """
+        return tablename in self.allTables()

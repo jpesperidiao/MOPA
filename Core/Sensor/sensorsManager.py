@@ -25,6 +25,11 @@ from Settings.settings import Settings
 from .sensor import Sensor
 
 class SensorsManager():
+    """
+    Handles sensor objects. Later on, it should be able to handle signals, to always keep
+    sensor's information updated to all executions connected to the database (allowing real-
+    time updates to all MOPA users at once.)
+    """
     def __init__(self, settings=None):
         """
         Class constructor.
@@ -130,3 +135,11 @@ class SensorsManager():
             elif raster.hasPoint(param['coordinates']):
                 sensors[param['id']] = Sensor(param)
         return sensors
+
+    def removeSensor(self, sensor):
+        """
+        Removes sensor from database.
+        :param sensor: (Sensor) sensor to be removed from database.
+        """
+        # TODO
+        pass

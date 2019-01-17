@@ -20,3 +20,45 @@
  *                                                                         *
  ***************************************************************************/
 """
+
+import os
+
+from PyQt5 import uic
+from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QDialog, QWidget
+
+from Core.ProcessingTools.rasterLayer import RasterLayer
+from Core.Terrain.terrain import Terrain
+
+FORMCLASS, _ = uic.loadUiType(os.path.join(
+                                   os.path.dirname(__file__),
+                                   'mainWindow.ui'
+                                   )
+                            )
+
+class MainWindow(QMainWindow, FORMCLASS):
+       def __init__(self):
+              super(MainWindow, self).__init__()
+              self.setupUi(self)
+              self.raster = RasterLayer()
+              self.terrain = Terrain()
+
+       @pyqtSlot(bool, name='on_demPushButton_clicked')
+       def setDem(self):
+              """
+              Sets DEM to visualizer.
+              """
+              fd = QFileDialog()
+              dem = fd.getOpenFileName(caption=self.tr('Select a DEM raster'), filter=self.tr("Raster (*.png *.tif *.tiff)"))
+              dem = dem[0] if isinstance(dem, tuple) else dem
+              if dem != "":
+                     self.raster.setRaster(dem)
+                     title = self.tr("Visualization of {0}").format(self.raster.name())
+                     self.groupBox.setTitle(title)
+
+       def keyPressEvent(self, e):
+              """
+              test.
+              """
+              if e.key() == Qt.Key_M and self.raster.isValid():
+                     self.terrain.mayaviPlotter(self.raster)

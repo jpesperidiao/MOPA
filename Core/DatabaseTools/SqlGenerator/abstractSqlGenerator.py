@@ -70,3 +70,17 @@ class AbstractSqlGenerator():
         Gets all observations from database.
         """
         return ""
+
+    def createShootersTable(self, viewName):
+        """
+        Creates the shooters' table.
+        :para viewName: (str) shooters' table name (default from settings).
+        """
+        return ""
+
+    def dropShootersTable(self, viewName):
+        """
+        Drops shooters' table.
+        :para viewName: (str) shooters' table name (default from settings).
+        """
+        return ""
