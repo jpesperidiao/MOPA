@@ -120,10 +120,10 @@ class Settings(object):
 
     def shootersTableName(self):
         """
-        Gets default shooters table view name.
-        :return: (str) view's name.
+        Gets default shooters table name.
+        :return: (str) table's name.
         """
-        return 'view_shooters'
+        return 'shooters'
 
     def clearShootersView(self):
         """
@@ -131,7 +131,5 @@ class Settings(object):
         :return: (bool) table status.
         """
         shootersTable = self.shootersTableName()
-        if self.settingsDb.tableExists(shootersTable):
-            self.settingsDb.dropView(shootersTable)
-        self.settingsDb.createShootersTable(shootersTable)
-        return self.settingsDb.tableExists(shootersTable)
+        self.settingsDb.dropView(shootersTable)
+        return self.settingsDb.createShootersTable(shootersTable)
