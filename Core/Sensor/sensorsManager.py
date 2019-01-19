@@ -54,6 +54,8 @@ class SensorsManager():
             param['deactivation_date'], param['status'] = info
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
+            param['id'] = int(param['id'])
+            param['epsg'] = int(param['epsg'])
         return Sensor(param)
 
     def getNewSensor(self):
@@ -94,6 +96,8 @@ class SensorsManager():
             param['deactivation_date'], param['status'] = item
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
+            param['id'] = int(param['id'])
+            param['epsg'] = int(param['epsg'])
             sensors[param['id']] = Sensor(param)
         return sensors
 
@@ -109,6 +113,8 @@ class SensorsManager():
             param['deactivation_date'], param['status'] = item
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
+            param['id'] = int(param['id'])
+            param['epsg'] = int(param['epsg'])
             if param['status']:
                 sensors[param['id']] = Sensor(param)
         return sensors
@@ -129,6 +135,8 @@ class SensorsManager():
             param['deactivation_date'], param['status'] = item
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
+            param['id'] = int(param['id'])
+            param['epsg'] = int(param['epsg'])
             if param ['epsg'] != epsg:
                 # for now, just ignore, later reprojection should be applied
                 continue

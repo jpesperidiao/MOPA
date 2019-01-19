@@ -23,23 +23,29 @@
 
 from PyQt5.QtCore import QObject
 
-class Sensor(QObject):
+class Observation(QObject):
+    """
+    I think a class parent to this and sensor should be implemented.
+    (Something like QgsFeature for QGIS API, in order to make each children
+    a specific application of it). Validation method is pretty much not enough.
+    Some regex to check dates should be added, for instance...
+    """
     def __init__(self, parameters):
         """
         Class constructor.
+        :param parameters: (dict) observation's parameters map.
         """
-        super(Sensor, self).__init__()
+        super(Observation, self).__init__()
         if self.validateParameters(parameters):
-            self.parameters = parameters
-        else:
-            self.parameters = {
+            self.parameters = self.parameters = {
                 'id' : None,
-                'coordinates' : (0., 0.),
-                'epsg' : 0,
-                'activation_date' : '',
-                'deactivation_date' : '',
-                'status' : False
+                'azimuth' : (0., 0.),
+                'zenith' : 0,
+                'sensorId' : None,
+                'date' : ''
             }
+        else:
+            self.parameters = parameters
 
     def __getitem__(self, key):
         """
@@ -65,19 +71,21 @@ class Sensor(QObject):
             return self.tr("Invalid parameters. It must be a map of attributes.")
         if 'id' not in parameters or not isinstance(parameters['id'], int):
             return self.tr("Invalid ID.")
-        if 'coordinates' not in parameters or type(parameters['coordinates']) not in (list, tuple)\
-            or not sum([type(coordinate) in (int, float) for coordinate in parameters['coordinates']]):
-            return self.tr("Invalid coordinates.")
-        if 'epsg' not in parameters or not isinstance(parameters['epsg'], int):
-            return self.tr("Invalid CRS (EPSG code is not valid).")
-        if 'activation_date' not in parameters or \
-                type(parameters['activation_date']) not in (type(None), str):
-            return self.tr("Invalid activation date.")
-        if 'deactivation_date' not in parameters or \
-                type(parameters['deactivation_date']) not in (type(None), str):
-            return self.tr("Invalid deactivation date.")
-        if 'status' not in parameters or not isinstance(parameters['status'], bool):
-            return self.tr("Invalid status.")
+        if 'azimuth' not in parameters or not isinstance(parameters['azimuth'], float) or \
+                isinstance(parameters['azimuth'], float) > 180 or \
+                isinstance(parameters['azimuth'], float) < -180:
+            return self.tr("Invalid azimuth angle.")
+        if 'zenith' not in parameters or not isinstance(parameters['zenith'], float) or \
+                isinstance(parameters['zenith'], float) > 360 or \
+                isinstance(parameters['zenith'], float) < 0:
+            return self.tr("Invalid zenith angle.")
+        if 'sensorId' not in parameters or not isinstance(parameters['sensorId'], int) or \
+                not self.settings.getSensor(parameters['sensorId']).isValid():
+            # it checks if sensor associated exists into database before adding obs to db
+            return self.tr("Invalid sensor ID.")
+        if 'date' not in parameters or \
+                type(parameters['date']) not in (type(None), str):
+            return self.tr("Invalid event date.")
         return ""
 
     def validateParameters(self, parameters):
@@ -87,10 +95,3 @@ class Sensor(QObject):
         :return: (bool) validity status.
         """
         return self.invalidationReason(parameters) == ""
-
-    def isValid(self):
-        """
-        Checks if current instance has a valid set of parameters.
-        :return: (bool) instance's validity status.
-        """
-        return self.validateParameters(self.parameters)
