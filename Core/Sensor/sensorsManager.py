@@ -23,6 +23,7 @@
 
 from Settings.settings import Settings
 from .sensor import Sensor
+from Core.Observation.observationsManager import ObservationsManager
 
 class SensorsManager():
     """
@@ -152,3 +153,12 @@ class SensorsManager():
         """
         # TODO
         pass
+
+    def getObservationsFromSensor(self, sensorId):
+        """
+        Gets all observations from a given sensor.
+        :param sensorId: (int) sensor ID.
+        :return: (list-of-Observation) observations made from a given sensor.
+        """
+        return ObservationsManager().getObservationsFromSensor(sensorId)
+        

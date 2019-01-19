@@ -29,6 +29,10 @@ class ShooterFinder():
     Class designed to handle problem solving. It should be able to:
     1- provide a solution (shooter object) to a given observation along with a
        set of sensors distributed over a territory, represented by a raster dem.
+
+    How do the scripts find their solutions:
+    1- define a region of interest based on maximum shooting range;
+    2- 
     """
     # methods enumerator
     AvailableMethods = 3
@@ -41,15 +45,6 @@ class ShooterFinder():
         if settings is None:
             settings = Settings()
         self.settings = settings
-        self.setupView()
-
-    def setupView(self):
-        """
-        Sets up the shooters table view into settings database. It clears it up in case
-        of existing data on it.
-        :return: (bool) view working status.
-        """
-        return self.settings.clearShootersView()
 
     def defaultParameters(self, spatialResolution):
         """
@@ -81,6 +76,29 @@ class ShooterFinder():
             ShooterFinder.Analytical : self.analyticalSolution,
             ShooterFinder.Combined : self.combinedSolution
         }[method](sensor, obs, dem, parameters)
+
+    def regionOfInterest(posRec, dataset, resolEspacial, distMaxDisparo=1000.0):
+        """
+        Finds ROI inside dem area in order to avoid unnecessary calculations.
+        TO DETERMINE PARAMETERS STILL - METHOD JUST COPIED FROM ORIGINAL SCRIPT
+        :return: (tuple-of-floats) coordinates from ROI in the same form as 'extents'
+                 method from RasterLayer.
+        """
+        gt = dataset.GetGeoTransform()
+        elevation = dataset.ReadAsArray()
+        limiteDisparo = int((distMaxDisparo / resolEspacial)) # para limitar por regiao de real possibilidade de disparo
+        xMax = len(elevation)
+        yMax = len(elevation[0])
+        
+        # converter coordenadas de campo para pixel
+        denominador = 1. / (gt[1] * gt[5] - gt[2] * gt[4])
+        px = int((gt[5] * (posRec[0] - gt[0]) - gt[2] * (posRec[1] - gt[3])) * denominador - 0.5)
+        py = int(-(gt[4] * (posRec[0] - gt[0]) - gt[1] * (posRec[1] - gt[3])) * denominador - 0.5)
+        
+        (xMin, xMax, yMin, yMax) = (max(0, px - limiteDisparo), min(xMax, px + limiteDisparo), 
+                                    max(0, py - limiteDisparo), min(yMax, py + limiteDisparo))
+        
+        return (int(xMin), int(xMax), int(yMin),int(yMax))
 
     def helmertSolution(self, sensor, obs, dem, parameters):
         """

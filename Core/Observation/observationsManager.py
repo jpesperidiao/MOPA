@@ -36,22 +36,24 @@ class ObservationsManager():
             settings = Settings()
         self.settings = settings
 
-    def getSensorFromId(self, observationId):
+    def getObservationsFromSensor(self, sensorId):
         """
         Gets a observation from database using its
-        :param observationId: (int) observation ID.
+        :param sensorId: (int) target sensor ID.
         :return: (Observation) observation object.
         """
-        param = dict()
-        info = self.settings.getObservation(observationId)
-        if info != tuple():
+        observations = dict()
+        for info in self.settings.observationsItems():
+            param = dict()
             param['id'], param['azimuth'], param ['zenith'], param['sensorId'],\
             param['date'] = info
             param['azimuth'] = float(param['azimuth'])
             param['zenith'] = float(param['zenith'])
             param['id'] = int(param['id'])
             param['sensorId'] = int(param['sensorId'])
-        return Observation(param)
+            if param['sensorId'] == sensorId:
+                observations[param['id']] = Observation(param)
+        return observations
 
     def getNewObservation(self):
         """

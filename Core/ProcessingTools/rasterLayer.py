@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os, gdal
+import os, gdal, osr
 import numpy as np
 
 class RasterLayer(object):
@@ -112,6 +112,28 @@ class RasterLayer(object):
             return int(self.dataset().GetProjection().split(',')[-1].split('"')[1])
         except:
             return 0
+
+    def isProject(self):
+        """
+        Determines whether raster has a projected CRS.
+        :return: (bool) if raster is projected.
+        """
+        ds = self.dataset()
+        if ds is None:
+            return False
+        srs = osr.SpatialReference(wkt=ds.GetProjetion())
+        return srs.IsProjected()
+
+    def isGeographic(self):
+        """
+        Determines whether raster has a geographic CRS.
+        :return: (bool) if raster is projected.
+        """
+        ds = self.dataset()
+        if ds is None:
+            return False
+        srs = osr.SpatialReference(wkt=ds.GetProjetion())
+        return srs.IsGeographic()
 
     def projection(self):
         """
