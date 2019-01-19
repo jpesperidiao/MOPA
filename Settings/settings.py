@@ -94,14 +94,15 @@ class Settings(object):
         """
         return self.setupDatabases()
 
-    def addSensor(self, coordinates, epsg, status):
+    def addSensor(self, coordinates, epsg, name, status):
         """
         Add a new sensor to the database.
         :param coordinates: (tuple-of-floats) tuple with sensor's coordinates.
         :param epsg: (int) CRS authentication ID.
+        :param name: (str) station's friendly name.
         :param status: (bool) sensor's activation status.
         """
-        self.settingsDb.addSensor(coordinates, epsg, status)
+        self.settingsDb.addSensor(coordinates, epsg, name, status)
 
     def getSensor(self, sensorId):
         """

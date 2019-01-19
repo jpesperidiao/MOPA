@@ -34,6 +34,7 @@ class Sensor(QObject):
         else:
             self.parameters = {
                 'id' : None,
+                'name' : '',
                 'coordinates' : (0., 0.),
                 'epsg' : 0,
                 'activation_date' : '',
@@ -65,6 +66,9 @@ class Sensor(QObject):
             return self.tr("Invalid parameters. It must be a map of attributes.")
         if 'id' not in parameters or not isinstance(parameters['id'], int):
             return self.tr("Invalid ID.")
+        if 'name' not in parameters or \
+                type(parameters['name']) not in (type(None), str):
+            return self.tr("Invalid sensor's base friendly name.")
         if 'coordinates' not in parameters or type(parameters['coordinates']) not in (list, tuple)\
             or not sum([type(coordinate) in (int, float) for coordinate in parameters['coordinates']]):
             return self.tr("Invalid coordinates.")

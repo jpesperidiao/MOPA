@@ -162,16 +162,17 @@ class AbstractDatabase(QObject):
             return sensorL[0] if len(sensorL) > 0 else tuple()
         return tuple()
 
-    def addSensor(self, coordinates, epsg, status=True, commit=True):
+    def addSensor(self, coordinates, epsg, name=None, status=True, commit=True):
         """
         Gets a sensor using its ID.
         :param coordinates: (tuple-of-float) sensor's coordinates.
         :param epsg: (int) sensor's CRS auth id.
+        :param name: (str) station's friendly name.
         :param status: (bool) working status.
         :param commit: (bool) commit addition to database.
         """
         if self.isConnected():
-            return self.query(self.gen.addSensor(coordinates, epsg, status), commit)
+            return self.query(self.gen.addSensor(coordinates, epsg, name, status), commit)
         return 
 
     def createShootersTable(self, tablename, commit=True):

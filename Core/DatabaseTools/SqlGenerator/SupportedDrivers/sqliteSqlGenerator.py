@@ -85,6 +85,7 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         return """\
         CREATE TABLE sensors (
             id INTEGER PRIMARY KEY,
+            name TEXT,
             coordinates TEXT NOT NULL,
             epsg INTEGER NOT NULL,
             activation_date TIMESTAMP,
@@ -111,17 +112,27 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         """
         return "SELECT * FROM observations;"
 
-    def addSensor(self, coordinates, epsg, status=True):
+    def addSensor(self, coordinates, epsg, name=None, status=True):
         """
         Adds a sensor to the database.
         :param coordinates: (tuple-of-float) new sensor's coordinates.
         :param epsg: (int) auth id for coordinates' CRS.
+        :param name: (str) station's friendly name.
         :param status: (bool) sensor's activation status.
         """
-        return """\
-        INSERT INTO sensors (coordinates, epsg, activation_date, status)
-        VALUES ('{coord}', {epsg}, date('now'), {status});
-        """.format(coord=",".join(map(str, coordinates)), epsg=epsg, status=int(status))
+        if name is not None:
+            return """\
+            INSERT INTO sensors (coordinates, epsg, activation_date, status, name)
+            VALUES ('{coord}', {epsg}, date('now'), {status}, '{name}');
+            """.format(
+                    coord=",".join(map(str, coordinates)), epsg=epsg,
+                    status=int(status), name=name
+                )
+        else:
+            return """\
+            INSERT INTO sensors (coordinates, epsg, activation_date, status)
+            VALUES ('{coord}', {epsg}, date('now'), {status});
+            """.format(coord=",".join(map(str, coordinates)), epsg=epsg, status=int(status))
 
     def getSensor(self, sensorId):
         """

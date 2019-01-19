@@ -50,7 +50,7 @@ class SensorsManager():
         param = dict()
         info = self.settings.getSensor(sensorId)
         if info != tuple():
-            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['id'], param['name'], param['coordinates'], param ['epsg'], param['activation_date'],\
             param['deactivation_date'], param['status'] = info
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
@@ -65,15 +65,16 @@ class SensorsManager():
         """
         return Sensor({})
 
-    def addSensor(self, coordinates, epsg, status=True):
+    def addSensor(self, coordinates, epsg, name=None, status=True):
         """
         Add a sensor to the database.
         :param coordinates: (tuple-of-floats) tuple with sensor's coordinates.
         :param epsg: (int) CRS authentication ID.
+        :param name: (str) station's friendly name.
         :param status: (bool) sensor's activation status.
         :return: (Sensor) sensor object.
         """
-        self.settings.addSensor(coordinates, epsg, status)
+        self.settings.addSensor(coordinates, epsg, name, status)
 
     def rasterHasSensor(self, raster, sensor):
         """
@@ -92,7 +93,7 @@ class SensorsManager():
         sensors = dict()
         for item in self.settings.sensorsItems():
             param = dict()
-            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['id'], param['name'], param['coordinates'], param ['epsg'], param['activation_date'],\
             param['deactivation_date'], param['status'] = item
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
@@ -109,7 +110,7 @@ class SensorsManager():
         sensors = dict()
         for item in self.settings.sensorsItems():
             param = dict()
-            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['id'], param['name'], param['coordinates'], param ['epsg'], param['activation_date'],\
             param['deactivation_date'], param['status'] = item
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])
@@ -131,7 +132,7 @@ class SensorsManager():
         epsg = raster.epsg()
         for item in self.settings.sensorsItems():
             param = dict()
-            param['id'], param['coordinates'], param ['epsg'], param['activation_date'],\
+            param['id'], param['name'], param['coordinates'], param ['epsg'], param['activation_date'],\
             param['deactivation_date'], param['status'] = item
             param['coordinates'] = tuple([float(c) for c in param['coordinates'].split(',')])
             param['status'] = bool(param['status'])

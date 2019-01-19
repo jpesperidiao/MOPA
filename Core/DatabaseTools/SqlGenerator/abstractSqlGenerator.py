@@ -56,11 +56,12 @@ class AbstractSqlGenerator():
         """
         return ""
 
-    def addSensor(self, coordinates, epsg, status=True):
+    def addSensor(self, coordinates, epsg, name=None, status=True):
         """
         Adds a sensor to the database.
         :param coordinates: (tuple-of-float) new sensor's coordinates.
         :param epsg: (int) auth id for coordinates' CRS.
+        :param name: (str) station's friendly name.
         :param status: (bool) sensor's activation status.
         """
         return ""
