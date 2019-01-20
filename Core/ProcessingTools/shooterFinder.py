@@ -23,6 +23,7 @@
 
 from Settings.settings import Settings
 from Core.Sensor.sensorsManager import SensorsManager
+from Core.enums import Enums
 
 class ShooterFinder():
     """
@@ -30,9 +31,16 @@ class ShooterFinder():
     1- provide a solution (shooter object) to a given observation along with a
        set of sensors distributed over a territory, represented by a raster dem.
 
+    Important:
+    It is assumed that the azimuth and zenith angles calculated by the sensor is 
+    taking METRICAL units as reference when generating it! If not, this should be
+    changed and somehow treated!
+
     How do the scripts find their solutions:
     1- define a region of interest based on maximum shooting range;
-    2- 
+    2- calculate height for roi (possible points);
+    3- verifies actual height and if it is within height tolerance; and
+    4- filter possible solutions by a conical filter (angle tolerances). (optional)
     """
     # methods enumerator
     AvailableMethods = 3
@@ -77,28 +85,32 @@ class ShooterFinder():
             ShooterFinder.Combined : self.combinedSolution
         }[method](sensor, obs, dem, parameters)
 
-    def regionOfInterest(posRec, dataset, resolEspacial, distMaxDisparo=1000.0):
+    def regionOfInterest(self, sensor, maxDistance):
         """
-        Finds ROI inside dem area in order to avoid unnecessary calculations.
-        TO DETERMINE PARAMETERS STILL - METHOD JUST COPIED FROM ORIGINAL SCRIPT
+        Finds ROI around a sensor considering maximum distnace a shooter can be to it.
+        :param sensor: (Sensor) target sensor.
+        :param maxDistance: (float) maximum distance to which a shooter can be positioned in map units.
         :return: (tuple-of-floats) coordinates from ROI in the same form as 'extents'
                  method from RasterLayer.
         """
-        gt = dataset.GetGeoTransform()
-        elevation = dataset.ReadAsArray()
-        limiteDisparo = int((distMaxDisparo / resolEspacial)) # para limitar por regiao de real possibilidade de disparo
-        xMax = len(elevation)
-        yMax = len(elevation[0])
-        
-        # converter coordenadas de campo para pixel
-        denominador = 1. / (gt[1] * gt[5] - gt[2] * gt[4])
-        px = int((gt[5] * (posRec[0] - gt[0]) - gt[2] * (posRec[1] - gt[3])) * denominador - 0.5)
-        py = int(-(gt[4] * (posRec[0] - gt[0]) - gt[1] * (posRec[1] - gt[3])) * denominador - 0.5)
-        
-        (xMin, xMax, yMin, yMax) = (max(0, px - limiteDisparo), min(xMax, px + limiteDisparo), 
-                                    max(0, py - limiteDisparo), min(yMax, py + limiteDisparo))
-        
-        return (int(xMin), int(xMax), int(yMin),int(yMax))
+        # coordinates may or may not include altitude, hence indexing is necessary
+        y, x = sensor['coordinates'](0), sensor['coordinates'](1)
+        return (x - maxDistance, x + maxDistance, y - maxDistance, y + maxDistance)
+
+    def pixelRoi(self, dem, sensor, maxDistance):
+        """
+        Finds ROI in pixel coordinates from raster.
+        :param spatialRes: (RasterLayer) DEM raster.
+        :param sensor: (Sensor) target sensor.
+        :param maxDistance: (float) maximum distance to which a shooter can be positioned in METERS.
+        :return: (tuple-of-float) pixel coordinates for ROI.
+        """
+        if dem.isGeographic():
+            maxDistance = maxDistance * 180 / (Enums.EARTH_RADIUS * Enums.PI)
+        xMin, xMax, yMin, yMax = self.regionOfInterest(dem, sensor, maxDistance)
+        xMin, yMin = dem.coordinatesToPixel(xMin, yMin)
+        xMax, yMax = dem.coordinatesToPixel(xMax, yMax)
+        return (max(0, xMin), min(dem.width(), xMax), max(0, yMin), min(dem.height(), yMax))
 
     def helmertSolution(self, sensor, obs, dem, parameters):
         """
@@ -109,8 +121,20 @@ class ShooterFinder():
         :param: (RasterLayer) digital elevation model from target area.
         :return: (Shooter) shooter's info.
         """
-        # TODO
+        xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, max)
+        roi = dem.bands()[xMin:xMax, yMin:yMax]
         return None
+
+    def findHeight(self, euclideanVector, roi):
+        """
+        Finds the heights for all pixels in ROI (e.g. the plane defined by euclidean vector for
+        ROI points). Method used by analytical method.
+        :param euclideanVector: (tuple-of-float) euclidenan vector's azimuth and zenith angles.
+        :param roi: (tuple-of-int) region in dem that should be searched.
+        :return: (Numpy.ndarray) array heights (plane defined by E.V. in ROI).
+        """
+        # find plane parameter for each element and then calculate Z.
+        pass
 
     def analyticalSolution(self, sensor, obs, dem, parameters):
         """
@@ -122,7 +146,13 @@ class ShooterFinder():
         :param: (RasterLayer) digital elevation model from target area.
         :return: (Shooter) shooter's info.
         """
-        # TODO
+        xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, max)
+        roi = dem.bands()[xMin:xMax, yMin:yMax]
+        if dem.isGeographic():
+            pass
+        euclideanVector = ()
+        self.findHeight(euclideanVector, roi)
+        
         return None
 
     def combinedSolution(self, sensor, obs, dem, parameters):

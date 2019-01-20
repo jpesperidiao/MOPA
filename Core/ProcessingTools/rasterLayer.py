@@ -24,9 +24,9 @@
 import os, gdal, osr
 import numpy as np
 
+from Core.enums import Enums
+
 class RasterLayer(object):
-    # approximation of earth radius in meters
-    EARTH_RADIUS = 6378100
     def __init__(self, path=None):
         """
         Class constructor.
@@ -175,7 +175,7 @@ class RasterLayer(object):
                 # in order to retrieve spatial resolution, it is also considered the most common ones: 1, 5, 10, 30, 90
                 possibleResList = [1, 5, 10, 30, 90]
                 # aproximate resolution is retrieve as of PI * EARTH_RADIUS * ANGLE / 180
-                aproxReso = np.pi * self.EARTH_RADIUS * pxWidth / 180
+                aproxReso = np.pi * Enums.EARTH_RADIUS * pxWidth / 180
                 if aproxReso > max(possibleResList):
                     return max(possibleResList)
                 for idx, reso in enumerate(possibleResList):
