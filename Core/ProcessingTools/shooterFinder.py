@@ -174,8 +174,6 @@ class ShooterFinder():
         :param dem: (RasterLayer) digital elevation model from target area.
         :return: (Shooter) shooter's info.
         """
-        xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, max)
-        roi = dem.bands()[xMin:xMax, yMin:yMax]
         zen, az = obs['zenith'], obs['azimuth'] # in degrees
         euclideanVector = np.array([np.sin(zen) * np.cos(az), np.sin(zen) * np.sin(az), np.cos(zen)])
         angTol = parameters['angTol']
@@ -183,6 +181,8 @@ class ShooterFinder():
         altitudeTolerance = parameters['alTol']
         # 0.5 was arbitrarily used before
         lineTol = angTol / maxDistance
+        xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, maxDistance)
+        roi = dem.bands()[xMin:xMax, yMin:yMax]
         planeHeights = self.findPlaneHeights(euclideanVector, roi, dem, lineTol)
         solutions = {}
         for lin in range(len(roi)):
