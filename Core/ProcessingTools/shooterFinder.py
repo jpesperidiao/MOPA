@@ -21,6 +21,8 @@
  ***************************************************************************/
 """
 
+import numpy as np
+
 from Settings.settings import Settings
 from Core.Sensor.sensorsManager import SensorsManager
 from Core.enums import Enums
@@ -125,16 +127,42 @@ class ShooterFinder():
         roi = dem.bands()[xMin:xMax, yMin:yMax]
         return None
 
-    def findHeight(self, euclideanVector, roi):
+    def findPlaneHeights(self, euclideanVector, roi, sensor, dem, lineTolerance):
         """
         Finds the heights for all pixels in ROI (e.g. the plane defined by euclidean vector for
-        ROI points). Method used by analytical method.
+        ROI points). Method used by analytical method. Parametrical plane equation: V1 = V2 + k*T.
         :param euclideanVector: (tuple-of-float) euclidenan vector's azimuth and zenith angles.
-        :param roi: (tuple-of-int) region in dem that should be searched.
+        :param roi: (Numpy.nparray) region in DEM that should be searched.
+        :param dem: (RasterLayer) region where event is contained.
+        :param lineTolerance: (float) tolerance value to which a distortion of a point from a line
+                              may consider it part of it ("snap radius").
         :return: (Numpy.ndarray) array heights (plane defined by E.V. in ROI).
         """
-        # find plane parameter for each element and then calculate Z.
-        pass
+        # versorDir = np.array([np.sin(Zen) * np.cos(Az), np.sin(Zen) * np.sin(Az), np.cos(Zen)])
+        geoTransformParam = dem.getGeoTransformParam()
+        sensorY, sensorX, sensorZ = sensor['coordinates']
+        heights = np.zeros(roi.shape)
+        geog2metricParam = np.pi * Enums.EARTH_RADIUS / 180
+        for lin in range(len(roi)):
+            for col in range(len(roi[0])):
+                y, x = dem.pixelToCoordinates(col, lin, geoTransformParam)
+                # "directional" plane parameter
+                tx, ty = 0, 0
+                if dem.isGeographic():
+                    # considering that observation takes distance as its unit when being processed by sensor
+                    y = y * geog2metricParam
+                    x = x * geog2metricParam
+                if euclideanVector[0] != 0:
+                    tx = (x - sensorX) / euclideanVector[0]
+                if euclideanVector[1] != 0:
+                    ty = (y - sensorY) / euclideanVector[1]
+                t = np.sqrt(tx ** 2 + ty ** 2)
+                if np.sqrt(((t - tx) ** 2 + (t - ty) ** 2) * .5) <= lineTolerance:
+                    heights[lin][col] = sensorZ + t * euclideanVector[2]
+                else:
+                    # some unrealistic height
+                    heights[lin][col] = 9999.0
+        return heights
 
     def analyticalSolution(self, sensor, obs, dem, parameters):
         """
@@ -143,17 +171,27 @@ class ShooterFinder():
         of the plane that contains both shooter and sensor and intersects its plane with the DEM.
         :param sensor: (Sensor) sensor that detected the shooter.
         :param obs: (Observation) observation's info.
-        :param: (RasterLayer) digital elevation model from target area.
+        :param dem: (RasterLayer) digital elevation model from target area.
         :return: (Shooter) shooter's info.
         """
         xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, max)
         roi = dem.bands()[xMin:xMax, yMin:yMax]
-        if dem.isGeographic():
-            pass
-        euclideanVector = ()
-        self.findHeight(euclideanVector, roi)
-        
-        return None
+        zen, az = obs['zenith'], obs['azimuth'] # in degrees
+        euclideanVector = np.array([np.sin(zen) * np.cos(az), np.sin(zen) * np.sin(az), np.cos(zen)])
+        angTol = parameters['angTol']
+        maxDistance = parameters['maxDistance']
+        altitudeTolerance = parameters['alTol']
+        # 0.5 was arbitrarily used before
+        lineTol = angTol / maxDistance
+        planeHeights = self.findPlaneHeights(euclideanVector, roi, dem, lineTol)
+        solutions = {}
+        for lin in range(len(roi)):
+            for col in range(len(roi[0])):
+                h = planeHeights[lin][col]
+                if abs(h - roi[lin][col]) <= altitudeTolerance:
+                    # minimum coordinates must be added to map it back to original raster px coordinates
+                    solutions.add((lin + yMin, col + xMin, h))
+        return solutions
 
     def combinedSolution(self, sensor, obs, dem, parameters):
         """

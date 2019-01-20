@@ -113,7 +113,7 @@ class RasterLayer(object):
         except:
             return 0
 
-    def isProject(self):
+    def isProjected(self):
         """
         Determines whether raster has a projected CRS.
         :return: (bool) if raster is projected.
@@ -196,7 +196,7 @@ class RasterLayer(object):
         :param gt: (list-of-float) dataset's geotransformation parameters.
         :return: (tuple-of-float) X and Y coordinates (may be in meters/degrees/etc, defined by entry)
         """
-        if col > self.height() or lin > self.width():
+        if col > self.width() or lin > self.height():
             return (.0, .0)
         if gt is None:
             gt = self.getGeoTransformParam()
