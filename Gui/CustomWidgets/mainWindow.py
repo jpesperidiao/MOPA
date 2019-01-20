@@ -42,23 +42,36 @@ class MainWindow(QMainWindow, FORMCLASS):
               self.setupUi(self)
               self.raster = RasterLayer()
               self.terrain = Terrain()
+              self.visualizePushButton.setEnabled(False)
 
        @pyqtSlot(bool, name='on_demPushButton_clicked')
        def setDem(self):
               """
-              Sets DEM to visualizer.
+              Sets DEM informations to GUI and prepares it for visualization.
               """
               fd = QFileDialog()
               dem = fd.getOpenFileName(caption=self.tr('Select a DEM raster'), filter=self.tr("Raster (*.png *.tif *.tiff)"))
               dem = dem[0] if isinstance(dem, tuple) else dem
+              self.visualizePushButton.setEnabled(self.raster is not None)
               if dem != "":
                      self.raster.setRaster(dem)
-                     title = self.tr("Visualization of {0}").format(self.raster.name())
-                     self.groupBox.setTitle(title)
+                     self.visualizePushButton.setEnabled(self.raster.isValid())
+                     self.groupBox.setTitle(self.tr("DEM information: {0}").format(self.raster.name()))
+                     self.fileLabel.setText(self.tr("File path: {0}").format(dem))
+                     self.authLabel.setText(self.tr("CRS name: {0}").format(self.raster.projection()))
+                     self.authLabel.setText(self.tr("CRS authentication ID: {0}").format(self.raster.epsg()))
+                     self.maxLabel.setText(self.tr("Max. altitude: {0} m").format(self.raster.bands().max()))
+                     self.minLabel.setText(self.tr("Min. altitude: {0} m").format(self.raster.bands().min()))
+                     self.heightLabel.setText(self.tr("Raster height: {0}").format(self.raster.height()))
+                     self.widthLabel.setText(self.tr("Raster width: {0}").format(self.raster.width()))
+                     self.resLabel.setText(self.tr("Spatial resolution: {0}").format(self.raster.spatialResolution()))
+                     units = "meters" if not self.raster.isGeographic() else "degrees"
+                     self.unitsLabel.setText(self.tr("DEM information: {0}").format(units))
 
-       def keyPressEvent(self, e):
+       @pyqtSlot(bool, name='on_visualizePushButton_clicked')
+       def visualizeDem(self):
               """
-              test.
+              Produces the visualization for current raster.
               """
-              if e.key() == Qt.Key_M and self.raster.isValid():
+              if self.raster.isValid():
                      self.terrain.mayaviPlotter(self.raster)

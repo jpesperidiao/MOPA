@@ -118,10 +118,9 @@ class RasterLayer(object):
         Determines whether raster has a projected CRS.
         :return: (bool) if raster is projected.
         """
-        ds = self.dataset()
-        if ds is None:
+        if self.dataset() is None:
             return False
-        srs = osr.SpatialReference(wkt=ds.GetProjetion())
+        srs = osr.SpatialReference(wkt=self.dataset().GetProjetion())
         return srs.IsProjected()
 
     def isGeographic(self):
@@ -129,10 +128,9 @@ class RasterLayer(object):
         Determines whether raster has a geographic CRS.
         :return: (bool) if raster is projected.
         """
-        ds = self.dataset()
-        if ds is None:
+        if self.dataset() is None:
             return False
-        srs = osr.SpatialReference(wkt=ds.GetProjetion())
+        srs = osr.SpatialReference(wkt=self.dataset().GetProjection())
         return srs.IsGeographic()
 
     def projection(self):
