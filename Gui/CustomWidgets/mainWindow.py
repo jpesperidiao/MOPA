@@ -58,13 +58,14 @@ class MainWindow(QMainWindow, FORMCLASS):
                      self.visualizePushButton.setEnabled(self.raster.isValid())
                      self.groupBox.setTitle(self.tr("DEM information: {0}").format(self.raster.name()))
                      self.fileLabel.setText(self.tr("File path: {0}").format(dem))
-                     self.authLabel.setText(self.tr("CRS name: {0}").format(self.raster.projection()))
-                     self.authLabel.setText(self.tr("CRS authentication ID: {0}").format(self.raster.epsg()))
+                     self.crsLabel.setText(self.tr("CRS name: {0}").format(self.raster.projection()))
                      self.maxLabel.setText(self.tr("Max. altitude: {0} m").format(self.raster.bands().max()))
                      self.minLabel.setText(self.tr("Min. altitude: {0} m").format(self.raster.bands().min()))
                      self.heightLabel.setText(self.tr("Raster height: {0}").format(self.raster.height()))
                      self.widthLabel.setText(self.tr("Raster width: {0}").format(self.raster.width()))
-                     self.resLabel.setText(self.tr("Spatial resolution: {0}").format(self.raster.spatialResolution()))
+                     reso =  self.tr("Spatial resolution: {0} m (detected)") if not self.raster.isGeographic()\
+                             else self.tr("Spatial resolution: {0} m (detected)")
+                     self.resLabel.setText(reso.format(self.raster.spatialResolution()))
                      units = "meters" if not self.raster.isGeographic() else "degrees"
                      self.unitsLabel.setText(self.tr("DEM information: {0}").format(units))
 
