@@ -70,6 +70,20 @@ class Settings(object):
         """
         return os.path.dirname(__file__)
 
+    def observationsTableName(self, tablename):
+        """
+        Gets default observation table name.
+        :return: (str) table's name.
+        """
+        return 'observations'
+
+    def sensorsTableName(self, tablename):
+        """
+        Gets default sensors table name.
+        :return: (str) table's name.
+        """
+        return 'sensors'
+
     def setupDatabases(self):
         """
         Sets up initial databases.
@@ -94,6 +108,16 @@ class Settings(object):
         """
         return self.setupDatabases()
 
+    def addObservation(self, azimuth, zenith, sensorId):
+        """
+        Add a observation to the database.
+        :param azimuth: (tuple-of-floats) tuple with observation's coordinates.
+        :param zenith: (int) CRS authentication ID.
+        :param sensorId: (bool) observation's activation status.
+        :return: (Observation) observation object added to the database.
+        """
+        return self.settingsDb.addObservation(azimuth, zenith, sensorId)
+
     def addSensor(self, coordinates, epsg, name, status):
         """
         Add a new sensor to the database.
@@ -112,6 +136,13 @@ class Settings(object):
         """
         return self.settingsDb.getSensor(sensorId)
 
+    def observationsItems(self):
+        """
+        Gets all info form all sensors in the database.
+        :return: (list-of-tuples) all sensors' informations.
+        """
+        return self.settingsDb.allObservations()
+
     def sensorsItems(self):
         """
         Gets all info form all sensors in the database.
@@ -126,11 +157,11 @@ class Settings(object):
         """
         return 'shooters'
 
-    def clearShootersView(self):
+    def clearShootersTable(self):
         """
-        Clear shooters' table view. Creates it if it doesn't exist.
-        :return: (bool) table status.
+        Clear shooters' table. Creates it if it doesn't exist.
+        :return: (bool) whether table exists.
         """
         shootersTable = self.shootersTableName()
-        self.settingsDb.dropView(shootersTable)
+        self.settingsDb.dropTable(shootersTable)
         return self.settingsDb.createShootersTable(shootersTable)

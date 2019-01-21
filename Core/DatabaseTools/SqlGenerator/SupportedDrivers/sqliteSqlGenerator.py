@@ -71,7 +71,8 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         return """\
         CREATE TABLE observations (
             id INTEGER PRIMARY KEY,
-            angle TEXT NOT NULL,
+            azimuth DOUBLE NOT NULL,
+            zenith DOUBLE NOT NULL,
             sensor INTEGER NOT NULL,
             date TIMESTAMP,
             FOREIGN KEY(sensor) REFERENCES sensors(id)
@@ -100,17 +101,43 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         """
         return "SELECT tbl_name FROM sqlite_master;"
 
+    def allObservations(self):
+        """
+        Gets all observations from database.
+        """
+        return "SELECT * FROM observations;"
+
     def allSensors(self):
         """
         Gets all sensors from database.
         """
         return "SELECT * FROM sensors;"
 
-    def allObservations(self):
+    def getObservation(self, obsId):
         """
-        Gets all observations from database.
+        Gets a observation using its ID.
+        :param obsId: (int) observation's ID.
         """
-        return "SELECT * FROM observations;"
+        return "SELECT * FROM observations WHERE id = {0};".format(obsId)
+
+    def getSensor(self, sensorId):
+        """
+        Gets a sensor using its ID.
+        :param sensorId: (int) sensor's ID.
+        """
+        return "SELECT * FROM sensors WHERE id = {0};".format(sensorId)
+
+    def addObservation(self, azimuth, zenith, sensorId):
+        """
+        Adds a observation to the database.
+        :param azimuth: observation's azimuth angle.
+        :param zenith: observation's zenith angle.
+        :param sensorId: (str) station's ID.
+        """
+        return """\
+        INSERT INTO observations (azimuth, zenith, sensor, date)
+        VALUES ({azimuth}, {zenith}, {sensorId}, date('now'));
+        """.format(azimuth=azimuth, zenith=zenith, sensorId=sensorId)
 
     def addSensor(self, coordinates, epsg, name=None, status=True):
         """
@@ -134,23 +161,16 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
             VALUES ('{coord}', {epsg}, date('now'), {status});
             """.format(coord=",".join(map(str, coordinates)), epsg=epsg, status=int(status))
 
-    def getSensor(self, sensorId):
+    def dropTable(self, tablename):
         """
-        Gets a sensor using its ID.
-        :param sensorId: (int) sensor's ID.
+        Drops table from database.
+        :param tablename: (str) table to be dropped
         """
-        return "SELECT * FROM sensors WHERE id = {0};".format(sensorId)
-        
-    def createShootersTable(self, viewName):
+        return "DROP TABLE IF EXISTS {0};".format(tablename)
+
+    def createShootersTable(self, tablename):
         """
         Creates the shooters' table.
-        :para viewName: (str) shooters' table name (default from settings).
-        """
-        return ""
-
-    def dropShootersTable(self, viewName):
-        """
-        Drops shooters' table.
-        :para viewName: (str) shooters' table name (default from settings).
+        :para tablename: (str) shooters' table name (default from settings).
         """
         return ""

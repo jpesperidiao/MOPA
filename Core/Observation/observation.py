@@ -23,6 +23,8 @@
 
 from PyQt5.QtCore import QObject
 
+from Settings.settings import Settings
+
 class Observation(QObject):
     """
     I think a class parent to this and sensor should be implemented.
@@ -37,15 +39,15 @@ class Observation(QObject):
         """
         super(Observation, self).__init__()
         if self.validateParameters(parameters):
-            self.parameters = self.parameters = {
+            self.parameters = parameters
+        else:
+            self.parameters = {
                 'id' : None,
-                'azimuth' : (0., 0.),
+                'azimuth' : 0.,
                 'zenith' : 0,
                 'sensorId' : None,
                 'date' : ''
             }
-        else:
-            self.parameters = parameters
 
     def __getitem__(self, key):
         """
@@ -79,8 +81,8 @@ class Observation(QObject):
                 isinstance(parameters['zenith'], float) > 360 or \
                 isinstance(parameters['zenith'], float) < 0:
             return self.tr("Invalid zenith angle.")
-        if 'sensorId' not in parameters or not isinstance(parameters['sensorId'], int) or \
-                not self.settings.getSensor(parameters['sensorId']).isValid():
+        if 'sensorId' not in parameters or not isinstance(parameters['sensorId'], int): # or \
+                # not Settings().getSensor(parameters['sensorId']).isValid():
             # it checks if sensor associated exists into database before adding obs to db
             return self.tr("Invalid sensor ID.")
         if 'date' not in parameters or \

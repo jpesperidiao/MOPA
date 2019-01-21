@@ -65,13 +65,11 @@ class ObservationsManager():
     def addObservation(self, azimuth, zenith, sensorId):
         """
         Add a observation to the database.
-        :param azimuth: (tuple-of-floats) tuple with observation's coordinates.
-        :param zenith: (int) CRS authentication ID.
-        :param sensorId: (bool) observation's activation status.
-        :return: (Observation) observation object added to the database.
+        :param azimuth: (float) tuple with observation's coordinates.
+        :param zenith: (float) CRS authentication ID.
+        :param sensorId: (int) observation's activation status.
         """
         self.settings.addObservation(azimuth, zenith, sensorId)
-        return 
 
     def allObservations(self):
         """

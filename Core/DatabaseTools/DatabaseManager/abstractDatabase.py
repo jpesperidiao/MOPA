@@ -142,6 +142,15 @@ class AbstractDatabase(QObject):
             return [t[0] for t in self.query(self.gen.allTables())]
         return []
 
+    def allObservations(self):
+        """
+        A list of all observation's information present at the database.
+        :return: (list-of-tuple) observations' informations.
+        """
+        if self.isConnected():
+            return self.query(self.gen.allObservations())
+        return []
+
     def allSensors(self):
         """
         A list of all sensor's information present at the database.
@@ -161,6 +170,18 @@ class AbstractDatabase(QObject):
             sensorL = self.query(self.gen.getSensor(sensorId))
             return sensorL[0] if len(sensorL) > 0 else tuple()
         return tuple()
+
+    def addObservation(self, azimuth, zenith, sensorId, commit=True):
+        """
+        Adds a sensor to the database.
+        :param azimuth: observation's azimuth angle.
+        :param zenith: observation's zenith angle.
+        :param sensorId: (str) station's ID.
+        :param commit: (bool) commit addition to database.
+        """
+        if self.isConnected():
+            return self.query(self.gen.addObservation(azimuth, zenith, sensorId), commit)
+        return 
 
     def addSensor(self, coordinates, epsg, name=None, status=True, commit=True):
         """

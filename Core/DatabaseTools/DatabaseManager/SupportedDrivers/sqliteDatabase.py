@@ -52,7 +52,8 @@ class SqliteDatabase(AbstractDatabase):
         Gets current database's connection name.
         :return: (str) database name.
         """
-        return ''
+        path = self.parameters['path']
+        return os.path.basename(os.path.splitext(path)[0]) if path != "" else ""
 
     def invalidConnectionReason(self, parameters):
         """

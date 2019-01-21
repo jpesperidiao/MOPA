@@ -30,7 +30,7 @@ class AbstractSqlGenerator():
         Creates the observations (shooting events) table.
         """
         return ""
-    
+
     def createSensors(self):
         """
         Creates the sensors (sensors positions and working info) table.
@@ -39,7 +39,13 @@ class AbstractSqlGenerator():
 
     def allTables(self):
         """
-        Get all available tables from database.
+        Gets all available tables in the database.
+        """
+        return ""
+
+    def allObservations(self):
+        """
+        Gets all observations from database.
         """
         return ""
 
@@ -49,10 +55,26 @@ class AbstractSqlGenerator():
         """
         return ""
 
+    def getObservation(self, obsId):
+        """
+        Gets a observation using its ID.
+        :param obsId: (int) observation's ID.
+        """
+        return ""
+
     def getSensor(self, sensorId):
         """
         Gets a sensor using its ID.
         :param sensorId: (int) sensor's ID.
+        """
+        return ""
+
+    def addObservation(self, azimuth, zenith, sensorId):
+        """
+        Adds a sensor to the database.
+        :param azimuth: observation's azimuth angle.
+        :param zenith: observation's zenith angle.
+        :param sensorId: (str) station's ID.
         """
         return ""
 
@@ -66,22 +88,16 @@ class AbstractSqlGenerator():
         """
         return ""
 
-    def allObservations(self):
+    def dropTable(self, tablename):
         """
-        Gets all observations from database.
+        Drops table from database.
+        :param tablename: (str) table to be dropped
         """
         return ""
 
-    def createShootersTable(self, viewName):
+    def createShootersTable(self, tablename):
         """
         Creates the shooters' table.
-        :para viewName: (str) shooters' table name (default from settings).
-        """
-        return ""
-
-    def dropShootersTable(self, viewName):
-        """
-        Drops shooters' table.
-        :para viewName: (str) shooters' table name (default from settings).
+        :para tablename: (str) shooters' table name (default from settings).
         """
         return ""
