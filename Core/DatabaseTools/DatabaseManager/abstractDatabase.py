@@ -214,7 +214,7 @@ class AbstractDatabase(QObject):
         :param commit: (bool) commit table creation to the database.
         """
         if self.isConnected() and self.tableExists(tablename):
-            self.query(self.gen.dropShootersTable(tablename), commit)
+            self.query(self.gen.dropTable(tablename), commit)
             return not self.tableExists(tablename)
         return False
 

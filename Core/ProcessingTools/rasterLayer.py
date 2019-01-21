@@ -121,7 +121,7 @@ class RasterLayer(object):
         if self.dataset() is None:
             return False
         srs = osr.SpatialReference(wkt=self.dataset().GetProjetion())
-        return srs.IsProjected()
+        return bool(srs.IsProjected())
 
     def isGeographic(self):
         """
@@ -131,7 +131,7 @@ class RasterLayer(object):
         if self.dataset() is None:
             return False
         srs = osr.SpatialReference(wkt=self.dataset().GetProjection())
-        return srs.IsGeographic()
+        return bool(srs.IsGeographic())
 
     def projection(self):
         """
@@ -165,7 +165,7 @@ class RasterLayer(object):
         """
         try:
             pxWidth = abs(self.getGeoTransformParam()[1])
-            if pxWidth > 0.01:
+            if not self.isGeographic():
                 # considering that no DEM with spatial resolution lesser than 0.01 m would be used,
                 # which is safe to consider, it is considered, then, that pixelWidth is in degrees 
                 return pxWidth

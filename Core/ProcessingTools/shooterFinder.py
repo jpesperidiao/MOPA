@@ -95,8 +95,7 @@ class ShooterFinder():
         :return: (tuple-of-floats) coordinates from ROI in the same form as 'extents'
                  method from RasterLayer.
         """
-        # coordinates may or may not include altitude, hence indexing is necessary
-        y, x = sensor['coordinates'](0), sensor['coordinates'](1)
+        y, x, _ = sensor['coordinates']
         return (x - maxDistance, x + maxDistance, y - maxDistance, y + maxDistance)
 
     def pixelRoi(self, dem, sensor, maxDistance):
@@ -109,9 +108,10 @@ class ShooterFinder():
         """
         if dem.isGeographic():
             maxDistance = maxDistance * 180 / (Enums.EARTH_RADIUS * Enums.PI)
-        xMin, xMax, yMin, yMax = self.regionOfInterest(dem, sensor, maxDistance)
-        xMin, yMin = dem.coordinatesToPixel(xMin, yMin)
-        xMax, yMax = dem.coordinatesToPixel(xMax, yMax)
+        # y-axis is inverted because image's y-reference is inverted to normal axis
+        xMin, xMax, yMax, yMin = self.regionOfInterest(sensor, maxDistance)
+        xMin, yMin = dem.coordinatesToPixel(yMin, xMin)
+        xMax, yMax = dem.coordinatesToPixel(yMax, xMax)
         return (max(0, xMin), min(dem.width(), xMax), max(0, yMin), min(dem.height(), yMax))
 
     def helmertSolution(self, sensor, obs, dem, parameters):
