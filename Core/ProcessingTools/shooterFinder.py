@@ -143,21 +143,24 @@ class ShooterFinder():
         sensorY, sensorX, sensorZ = sensor['coordinates']
         heights = np.zeros(roi.shape)
         geog2metricParam = np.pi * Enums.EARTH_RADIUS / 180
+        if dem.isGeographic():
+            # considering that observation takes distance as its unit when being processed by sensor
+            sensorY = sensorY * geog2metricParam
+            sensorX = sensorX * geog2metricParam
         for lin in range(len(roi)):
             for col in range(len(roi[0])):
                 y, x = dem.pixelToCoordinates(col, lin, geoTransformParam)
                 # "directional" plane parameter
                 tx, ty = 0, 0
                 if dem.isGeographic():
-                    # considering that observation takes distance as its unit when being processed by sensor
                     y = y * geog2metricParam
                     x = x * geog2metricParam
                 if euclideanVector[0] != 0:
                     tx = (x - sensorX) / euclideanVector[0]
                 if euclideanVector[1] != 0:
                     ty = (y - sensorY) / euclideanVector[1]
-                t = np.sqrt(tx ** 2 + ty ** 2)
-                if np.sqrt(((t - tx) ** 2 + (t - ty) ** 2) * .5) <= lineTolerance:
+                t = np.sqrt((tx ** 2 + ty ** 2) * .5)
+                if np.sqrt(((t - tx) ** 2 + (t - ty) ** 2) * .5) / t <= lineTolerance:
                     heights[lin][col] = sensorZ + t * euclideanVector[2]
                 else:
                     # some unrealistic height
@@ -175,15 +178,18 @@ class ShooterFinder():
         :return: (Shooter) shooter's info.
         """
         zen, az = obs['zenith'], obs['azimuth'] # in degrees
+        zen = zen * np.pi / 180
+        az = az * np.pi / 180
         euclideanVector = np.array([np.sin(zen) * np.cos(az), np.sin(zen) * np.sin(az), np.cos(zen)])
         angTol = parameters['angTol']
         maxDistance = parameters['maxDistance']
         altitudeTolerance = parameters['alTol']
         # 0.5 was arbitrarily used before
-        lineTol = angTol / maxDistance
+        # lineTol = angTol / maxDistance
+        lineTol = 0.1
         xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, maxDistance)
         roi = dem.bands()[xMin:xMax, yMin:yMax]
-        planeHeights = self.findPlaneHeights(euclideanVector, roi, dem, lineTol)
+        planeHeights = self.findPlaneHeights(euclideanVector, roi, sensor, dem, lineTol)
         solutions = {}
         for lin in range(len(roi)):
             for col in range(len(roi[0])):
