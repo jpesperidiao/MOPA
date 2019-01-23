@@ -67,7 +67,7 @@ class MainWindow(QMainWindow, FORMCLASS):
                              else self.tr("Spatial resolution: {0} m (detected)")
                      self.resLabel.setText(reso.format(self.raster.spatialResolution()))
                      units = "meters" if not self.raster.isGeographic() else "degrees"
-                     self.unitsLabel.setText(self.tr("DEM information: {0}").format(units))
+                     self.unitsLabel.setText(self.tr("DEM units: {0}").format(units))
 
        @pyqtSlot(bool, name='on_visualizePushButton_clicked')
        def visualizeDem(self):

@@ -159,7 +159,8 @@ class ShooterFinder():
                     tx = (x - sensorX) / euclideanVector[0]
                 if euclideanVector[1] != 0:
                     ty = (y - sensorY) / euclideanVector[1]
-                t = np.sqrt((tx ** 2 + ty ** 2) * .5)
+                t = np.sqrt((tx ** 2 + ty ** 2) * .5) if tx > 0 and ty > 0 \
+                    else -np.sqrt((tx ** 2 + ty ** 2) * .5)
                 if np.sqrt(((t - tx) ** 2 + (t - ty) ** 2) * .5) / t <= lineTolerance:
                     heights[lin][col] = sensorZ + t * euclideanVector[2]
                 else:
@@ -180,7 +181,7 @@ class ShooterFinder():
         zen, az = obs['zenith'], obs['azimuth'] # in degrees
         zen = zen * np.pi / 180
         az = az * np.pi / 180
-        euclideanVector = np.array([np.sin(zen) * np.cos(az), np.sin(zen) * np.sin(az), np.cos(zen)])
+        euclideanVector = np.array([np.sin(zen) * np.cos(az), np.sin(zen) * np.sin(az), -np.cos(zen)])
         angTol = parameters['angTol']
         maxDistance = parameters['maxDistance']
         altitudeTolerance = parameters['alTol']
