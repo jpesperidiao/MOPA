@@ -29,6 +29,8 @@ from PyQt5.QtWidgets import QFileDialog, QMainWindow, QDialog, QWidget
 
 from Core.ProcessingTools.rasterLayer import RasterLayer
 from Core.Terrain.terrain import Terrain
+from Core.Sensor.sensorsManager import SensorsManager
+from Core.Observation.observationsManager import ObservationsManager
 
 FORMCLASS, _ = uic.loadUiType(os.path.join(
                                    os.path.dirname(__file__),
@@ -43,6 +45,7 @@ class MainWindow(QMainWindow, FORMCLASS):
               self.raster = RasterLayer()
               self.terrain = Terrain()
               self.visualizePushButton.setEnabled(False)
+              self.sensors = dict()
 
        @pyqtSlot(bool, name='on_demPushButton_clicked')
        def setDem(self):
@@ -55,6 +58,8 @@ class MainWindow(QMainWindow, FORMCLASS):
               self.visualizePushButton.setEnabled(self.raster is not None)
               if dem != "":
                      self.raster.setRaster(dem)
+                     self.sensors = self.getAllSensorsFromRaster(self.raster)
+                     self.setupSensors()
                      self.visualizePushButton.setEnabled(self.raster.isValid())
                      self.groupBox.setTitle(self.tr("DEM information: {0}").format(self.raster.name()))
                      self.fileLabel.setText(self.tr("File path: {0}").format(dem))
@@ -76,3 +81,31 @@ class MainWindow(QMainWindow, FORMCLASS):
               """
               if self.raster.isValid():
                      self.terrain.mayaviPlotter(self.raster)
+
+       def getAllSensorsFromRaster(self, dem):
+              """
+              test.
+              """
+              return SensorsManager().getSensorsInsideRaster(dem)
+
+       def setupSensors(self):
+              """
+              test.
+              """
+              self.sensorComboBox.clear()
+              sensors = [s['name'] if s['name'] else self.tr("Station {0}").format(sid) for sid, s in self.sensors.items()]
+              sensors.insert(0, self.tr('Select a sensor...'))
+              self.sensorComboBox.addItems(sensors)
+
+       @pyqtSlot(int, name='on_sensorComboBox_currentIndexChanged')
+       def setupObservations(self, idx):
+              """
+              test.
+              """
+              self.obsComboBox.clear()
+              self.obsComboBox.addItems([self.tr('Select an observation...')])
+              if idx > 0:
+                     obs = []
+                     for o in ObservationsManager().getObservationsFromSensor(3):
+                            obs.append(o)
+                     self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])

@@ -138,23 +138,21 @@ class ShooterFinder():
                               may consider it part of it ("snap radius").
         :return: (Numpy.ndarray) array heights (plane defined by E.V. in ROI).
         """
-        # versorDir = np.array([np.sin(Zen) * np.cos(Az), np.sin(Zen) * np.sin(Az), np.cos(Zen)])
         geoTransformParam = dem.getGeoTransformParam()
         sensorY, sensorX, sensorZ = sensor['coordinates']
         heights = np.zeros(roi.shape)
-        geog2metricParam = np.pi * Enums.EARTH_RADIUS / 180
         if dem.isGeographic():
             # considering that observation takes distance as its unit when being processed by sensor
-            sensorY = sensorY * geog2metricParam
-            sensorX = sensorX * geog2metricParam
+            sensorY = np.deg2rad(sensorY) * Enums.EARTH_RADIUS
+            sensorX = np.deg2rad(sensorX) * Enums.EARTH_RADIUS
         for lin in range(len(roi)):
             for col in range(len(roi[0])):
                 y, x = dem.pixelToCoordinates(col, lin, geoTransformParam)
                 # "directional" plane parameter
                 tx, ty = 0, 0
                 if dem.isGeographic():
-                    y = y * geog2metricParam
-                    x = x * geog2metricParam
+                    y = np.deg2rad(y) * Enums.EARTH_RADIUS
+                    x = np.deg2rad(x) * Enums.EARTH_RADIUS
                 if euclideanVector[0] != 0:
                     tx = (x - sensorX) / euclideanVector[0]
                 if euclideanVector[1] != 0:
