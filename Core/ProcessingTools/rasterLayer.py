@@ -186,7 +186,7 @@ class RasterLayer(object):
                         else:
                             return reso
         except:
-            return 0
+            return 0.
 
     def pixelToCoordinates(self, col, lin, gt=None):
         """
@@ -224,6 +224,30 @@ class RasterLayer(object):
         lin = int((-1 * gt[4] * x + gt[1] * y) * denominator)
         lin = lin if lin <= self.width() else -1
         return (col, lin)
+
+    def max(self, band=None):
+        """
+        Gets the maximum value from current raster band.
+        :param band: (int) target band, by default it's 0.
+        """
+        if not self.isValid():
+            return 0.
+        if self.bandCount() > 1:
+            band = 0 if band is None else band
+            return np.nanmax(self.bands()[band])
+        return np.nanmax(self.bands())
+
+    def min(self, band=None):
+        """
+        Gets the maximum value from current raster band.
+        :param band: (int) target band, by default it's 0.
+        """
+        if not self.isValid():
+            return 0.
+        if self.bandCount() > 1:
+            band = 0 if band is None else band
+            return np.nanmin(self.bands()[band])
+        return np.nanmin(self.bands())
 
     def extents(self):
         """
