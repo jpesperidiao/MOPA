@@ -65,9 +65,11 @@ class ShooterFinder():
         """
         return {
             'plTol' : 0.05 * spatialResolution, # planimetric tolerance
-            'alTol' : 0.01 * spatialResolution, # altimetric tolerance
+            'alTol' : 0.2 * spatialResolution, # altimetric tolerance
             'angTol' : 1.5, # angular tolerance
-            'maxDistance' : 1000. # maximum shooting's distance from sensor
+            'maxDistance' : 1000., # maximum shooting's distance from sensor
+            'scale' : 75, # exponential distribuition parameter (Helmert's method)
+            'nrPoints' : 150 # number of points to be generated in Helmert's method
         }
 
     def findShooter(self, method, sensor, obs, dem, parameters=None):
@@ -114,6 +116,30 @@ class ShooterFinder():
         xMax, yMax = dem.coordinatesToPixel(yMax, xMax)
         return (max(0, xMin), min(dem.width(), xMax), max(0, yMin), min(dem.height(), yMax))
 
+    def generateObservations(self, sensor, euclideanVector, scale=75, nrPoints=100):
+        """
+        Generates a set of pseudo-observations randomly from a given sensor. Uses
+        an exponential distribuition of points definied by scale parameter to generate
+        the random points.
+        :param euclideanVector: (tuple-of-float) plane's euclidean vector.
+        :param scale: (float) mean value for the exponential distribuition.
+        :param nrPoints: (int) number of points to be generated.
+        :return: (Numpy.array) and array of pseudo-observations.
+        """
+        # we are still using the parametric equation for a plane, so first thing is to do
+        # is to generate a set of parameters
+        parameters = np.random.exponential(scale, nrPoints)
+        # from these parameters, we now use the sensor to get all generated points
+        points = []
+        ySensor, xSensor, zSensor = sensor['coordinates']
+        for t in parameters:
+            points.append([
+                    xSensor + t * euclideanVector[0],
+                    ySensor + t * euclideanVector[1],
+                    zSensor + t * euclideanVector[2]
+                ])
+        return np.array(points)
+
     def helmertSolution(self, sensor, obs, dem, parameters):
         """
         Finds shooter's position using Helmert's parametrical adjustment of a plane defined by
@@ -123,9 +149,43 @@ class ShooterFinder():
         :param: (RasterLayer) digital elevation model from target area.
         :return: (Shooter) shooter's info.
         """
-        xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, max)
+        altitudeTolerance = parameters['alTol']
+        nrPoints = parameters['nrPoints']
+        scale = parameters['scale']
+        maxDistance = parameters['maxDistance']
+        xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, maxDistance)
         roi = dem.bands()[xMin:xMax, yMin:yMax]
-        return None
+        zen, az = obs['zenith'], obs['azimuth'] # in degrees
+        zen = zen * np.pi / 180
+        az = az * np.pi / 180
+        euclideanVector = np.array([np.sin(zen) * np.cos(az), np.cos(zen) * np.cos(az), np.sin(az)])
+        # generate a set of observations to use in Helmert's adjustment
+        observations = self.generateObservations(sensor, euclideanVector, scale, nrPoints)
+        # build helmert's matrices
+        A = np.array([observations[:, 0], observations[:, 1], [1] * nrPoints]).transpose() # obs matrix
+        B = observations[:, 2] # observation values vector (L1)
+        C = np.array([sensor['coordinates'][1], sensor['coordinates'][2], 1]) # restriction vector
+        # prepare extended matrix for Helmert's linear system of equations to be solved
+        # the heights with restriction can be prepared now
+        H = A.transpose().dot(B)
+        H = [H[0], H[1], H[2], sensor['coordinates'][2]]
+        M=[]
+        A = A.transpose().dot(A)
+        for i in range (0,3):
+            M.append([A[i,0], A[i,1], A[i,2], C[i]])
+        M.append([C[0], C[1], C[2], 0])
+        M = np.array(M)
+        # z = a0 * x + a1 * y + a2 
+        a0, a1, a2, _ = np.linalg.solve(M,H) # solving for X in MX = H
+        shooters = set()
+        gt = dem.getGeoTransformParam()
+        for col in range(xMin, xMax):
+            for row in range(yMin, yMax):
+                y, x = dem.pixelToCoordinates(col, row, gt)
+                h = a0 * x + a1 * y + a2
+                if abs(h - roi[col-xMin][row-yMin]) <= altitudeTolerance:
+                    shooters.add((row, col, h))
+        return shooters
 
     def findPlaneHeights(self, euclideanVector, roi, sensor, dem, lineTolerance):
         """
@@ -179,7 +239,7 @@ class ShooterFinder():
         zen, az = obs['zenith'], obs['azimuth'] # in degrees
         zen = zen * np.pi / 180
         az = az * np.pi / 180
-        euclideanVector = np.array([np.sin(zen) * np.cos(az), np.sin(zen) * np.sin(az), -np.cos(zen)])
+        euclideanVector = np.array([np.sin(zen) * np.cos(az), np.cos(zen) * np.cos(az), np.sin(az)])
         angTol = parameters['angTol']
         maxDistance = parameters['maxDistance']
         altitudeTolerance = parameters['alTol']
@@ -189,14 +249,14 @@ class ShooterFinder():
         xMin, xMax, yMin, yMax = self.pixelRoi(dem, sensor, maxDistance)
         roi = dem.bands()[xMin:xMax, yMin:yMax]
         planeHeights = self.findPlaneHeights(euclideanVector, roi, sensor, dem, lineTol)
-        solutions = {}
-        for lin in range(len(roi)):
+        shooters = set()
+        for row in range(len(roi)):
             for col in range(len(roi[0])):
-                h = planeHeights[lin][col]
-                if abs(h - roi[lin][col]) <= altitudeTolerance:
+                h = planeHeights[row][col]
+                if abs(h - roi[row][col]) <= altitudeTolerance:
                     # minimum coordinates must be added to map it back to original raster px coordinates
-                    solutions.add((lin + yMin, col + xMin, h))
-        return solutions
+                    shooters.add((row + yMin, col + xMin, h))
+        return shooters
 
     def combinedSolution(self, sensor, obs, dem, parameters):
         """
@@ -206,5 +266,5 @@ class ShooterFinder():
         :param: (RasterLayer) digital elevation model from target area.
         :return: (Shooter) shooter's info.
         """
-        # TODO
-        return None
+        return self.analyticalSolution(sensor, obs, dem, parameters) &\
+               self.helmertSolution(sensor, obs, dem, parameters)
