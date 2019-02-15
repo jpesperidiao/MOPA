@@ -3,13 +3,13 @@
 """
 /***************************************************************************
  MOPA
-                                 An independet project
+                     An independet project
  Método de Obtenção da Posição de Atirador
-                              -------------------
-        begin                : 2018-01-15
-        git sha              : $Format:%H$
-        copyright            : (C) 2018 by João P. Esperidião
-        email                : joao.p2709@gmail.com
+                  -------------------
+     begin                : 2018-01-15
+     git sha              : $Format:%H$
+     copyright            : (C) 2018 by João P. Esperidião
+     email                : joao.p2709@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,10 +22,26 @@
  ***************************************************************************/
 """
 
+import locale
+from os import path
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import QSettings, qVersion, QCoreApplication, QTranslator
 
 from Settings.settings import Settings
 from Gui.CustomWidgets.mainWindow import MainWindow
+
+# provide internationalization
+locale_ = locale.getdefaultlocale()[0][0:2]
+locale_path = path.join(
+            path.dirname(__file__),
+            'i18n',
+            'mopa_{}.qm'.format(locale_)
+        )
+if path.exists(locale_path):
+    translator = QTranslator()
+    translator.load(locale_path)
+    if qVersion() > '4.3.3':
+        QCoreApplication.installTranslator(translator)
 
 app = MainWindow()
 app.show()
