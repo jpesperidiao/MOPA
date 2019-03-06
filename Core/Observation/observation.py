@@ -63,6 +63,13 @@ class Observation(QObject):
         """
         return str(self.parameters)
 
+    def attributes(self):
+        """
+        Gets all attributes available in a observation object.
+        :return: (tuple-of-str) an iterator for all attributes names.
+        """
+        return tuple(self.parameters.keys())
+
     def invalidationReason(self, parameters):
         """
         Gets sensor's parameters map invalidation reason, if any.

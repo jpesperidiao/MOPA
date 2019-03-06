@@ -55,7 +55,7 @@ class ObservationsManager():
                 observations[param['id']] = Observation(param)
         return observations
 
-    def getNewObservation(self):
+    def newObservation(self):
         """
         Gets a fresh and empty insance of a observation.
         :return: (Observation) new observation.
@@ -64,7 +64,7 @@ class ObservationsManager():
 
     def addObservation(self, azimuth, zenith, sensorId):
         """
-        Add a observation to the database.
+        Adds an observation to the database.
         :param azimuth: (float) tuple with observation's coordinates.
         :param zenith: (float) CRS authentication ID.
         :param sensorId: (int) observation's activation status.
@@ -91,7 +91,7 @@ class ObservationsManager():
     def removeObservation(self, observation):
         """
         Removes observation from database.
-        :param observation: (Sensor) observation to be removed from database.
+        :param observation: (Observation) observation to be removed from database.
         """
         # TODO
         pass
