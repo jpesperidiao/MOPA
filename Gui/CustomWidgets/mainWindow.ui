@@ -260,8 +260,11 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="8">
+       <item row="2" column="9">
         <widget class="QPushButton" name="updateObservationPushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -271,7 +274,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="7">
+       <item row="2" column="8">
         <widget class="QPushButton" name="addObservationPushButton">
          <property name="text">
           <string/>
