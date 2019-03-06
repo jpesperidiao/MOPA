@@ -118,6 +118,13 @@ class MainWindow(QMainWindow, FORMCLASS):
                 obs.add(o)
             self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])
 
+    @pyqtSlot(int, name='on_obsComboBox_currentIndexChanged')
+    def checkEditingObservation(self):
+        """
+        Checks whether current observations may be editted.
+        """
+        self.updateObservationPushButton.setEnabled(self.obsComboBox.currentIndex() > 0)
+
     @pyqtSlot(bool, name="on_updateObservationPushButton_clicked")
     def updateObservation(self):
         """
