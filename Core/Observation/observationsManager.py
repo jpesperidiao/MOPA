@@ -38,10 +38,12 @@ class ObservationsManager():
 
     def getObservationsFromSensor(self, sensorId):
         """
-        Gets a observation from database using its
+        Gets an observation from database using its
         :param sensorId: (int) target sensor ID.
         :return: (Observation) observation object.
         """
+        # REFACTOR NEEDED: BUILD QUERY TO REQUEST ALL OBS FROM A SENSOR INSTEAD OF QUERYING THEM ALL
+        # O(n) -> O(k)
         observations = dict()
         for info in self.settings.observationsItems():
             param = dict()
@@ -61,6 +63,25 @@ class ObservationsManager():
         :return: (Observation) new observation.
         """
         return Observation({})
+
+    def observationFromId(self, obsId):
+        """
+        Gets an observation from its ID.
+        :param obsId: (int) observation ID.
+        """
+        # REFACTOR NEEDED: BUILD QUERY TO REQUEST A SINGLE ITEM INSTEAD OF QUERYING THEM ALL
+        # O(n) -> O(1)
+        for info in self.settings.observationsItems():
+            param = dict()
+            param['id'], param['azimuth'], param ['zenith'], param['sensorId'],\
+            param['date'] = info
+            param['azimuth'] = float(param['azimuth'])
+            param['zenith'] = float(param['zenith'])
+            param['id'] = int(param['id'])
+            param['sensorId'] = int(param['sensorId'])
+            if param['id'] == obsId:
+                return Observation(param)
+        return self.newObservation()
 
     def addObservation(self, azimuth, zenith, sensorId):
         """
@@ -92,6 +113,14 @@ class ObservationsManager():
         """
         Removes observation from database.
         :param observation: (Observation) observation to be removed from database.
+        """
+        # TODO
+        pass
+
+    def updateObservation(self, parameters):
+        """
+        Updates the attribute values for a given observation into database.
+        :parameters: (dict) map of attributes of an observation.
         """
         # TODO
         pass

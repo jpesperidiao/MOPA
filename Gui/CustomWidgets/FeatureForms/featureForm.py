@@ -43,6 +43,7 @@ class FeatureForm(QDialog, FORM_CLASS):
         :param parent: (QWidget) widget to wich this item is related to.
         """
         super(FeatureForm, self).__init__(parent)
+        self.setupUi(self)
         self.feature = feature
         self.isEditable = isEditable
         self.parent = parent
@@ -63,13 +64,18 @@ class FeatureForm(QDialog, FORM_CLASS):
         :return: (dict) a map with all generated widgets for each attribute.
         """
         widgets = dict()
-        for attr in self.feature.attributes():
+        for row, attr in enumerate(self.feature.attributes()):
             if attr not in widgets:
                 widgets[attr] = dict()
-                widgets["label"] = QLabel(attr, self)
-                widgets["editLine"] = QLineEdit(self)
-                widgets["editLine"].setText(self.feature[attr])
-                widgets["editLine"].setEditable(self.isEditable)
+                widgets["label"] = QLabel(attr)
+                widgets["lineEdit"] = QLineEdit()
+                widgets["lineEdit"].setText(
+                        self.feature[attr] if isinstance(self.feature[attr], str) \
+                            else str(self.feature[attr])
+                    )
+                widgets["lineEdit"].setReadOnly(self.isEditable)
+                self.attributesGridLayout.addWidget(widgets["label"], row, 0)
+                self.attributesGridLayout.addWidget(widgets["lineEdit"], row, 1)
         return widgets
 
     def setEditable(self, active):

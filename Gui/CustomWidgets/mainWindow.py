@@ -33,6 +33,7 @@ from Core.Sensor.sensorsManager import SensorsManager
 from Core.Observation.observationsManager import ObservationsManager
 from Core.ProcessingTools.shooterFinder import ShooterFinder
 from Gui.CustomWidgets.summaryDialog import SummaryDialog
+from Gui.CustomWidgets.FeatureForms.observationsManagerDialog import ObservationsManagerDialog
 
 FORMCLASS, _ = uic.loadUiType(os.path.join(
                     os.path.dirname(__file__),
@@ -116,6 +117,23 @@ class MainWindow(QMainWindow, FORMCLASS):
             for o in ObservationsManager().getObservationsFromSensor(sid):
                 obs.add(o)
             self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])
+
+    @pyqtSlot(bool, name="on_updateObservationPushButton_clicked")
+    def updateObservation(self):
+        """
+        [TEST] Updates an observation in the database.
+        """
+        if self.obsComboBox.currentIndex() > 0:
+            obsId = int(self.obsComboBox.currentText().split(" ")[-1])
+            obs = ObservationsManager().allObservations()[obsId]
+            ObservationsManagerDialog().openForm(obs)
+
+    @pyqtSlot(bool, name="on_addObservationPushButton_clicked")
+    def addObservation(self):
+        """
+        [TEST] Adds an observation to the database.
+        """
+        ObservationsManagerDialog().openForm()
 
     def methodNameMap(self):
         """
