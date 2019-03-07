@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<!DOCTYPE TS><TS version="2.0" language="pt" sourcelanguage="">
+<context>
+    <name>Dialog</name>
+    <message>
+        <location filename="../Gui/CustomWidgets/FeatureForms/featureForm.ui" line="14"/>
+        <source>MOPA Feature Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/FeatureForms/featureForm.ui" line="33"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/FeatureForms/featureForm.ui" line="40"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>MainWindow</name>
     <message>
@@ -64,137 +81,137 @@
         <translation>Diretório:</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="216"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="243"/>
         <source>Find Shooter</source>
         <translation>Encontrar Atirador</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="203"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="229"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="223"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="236"/>
         <source>Vis. Shooter</source>
         <translation>Vis. Atirador</translation>
     </message>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.ui" line="246"/>
         <source>Sensor</source>
-        <translation>Receptor</translation>
+        <translation type="obsolete">Receptor</translation>
     </message>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.ui" line="256"/>
         <source>Observation</source>
-        <translation>Observação</translation>
+        <translation type="obsolete">Observação</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="59"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="60"/>
         <source>Select a DEM raster</source>
         <translation>Selecione o raster de MDE</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="59"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="60"/>
         <source>Raster (*.png *.tif *.tiff)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="67"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="68"/>
         <source>DEM information: {0}</source>
         <translation>Informação de MDE: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="68"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="69"/>
         <source>File path: {0}</source>
         <translation>Diretório: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="69"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="70"/>
         <source>CRS name: {0}</source>
         <translation>SRC: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="70"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="71"/>
         <source>Max. altitude: {0:.2f} m</source>
         <translation>Altitude máx.: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="71"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="72"/>
         <source>Min. altitude: {0:.2f} m</source>
         <translation>Altitude min.: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="72"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="73"/>
         <source>Raster height: {0}</source>
         <translation>Altura do raster: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="73"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="74"/>
         <source>Raster width: {0}</source>
         <translation>Largura do raster: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="74"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="75"/>
         <source>Spatial resolution: {0:.2f} m (detected)</source>
         <translation>Resolução espacial: {0:.2f} m (detectada)</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="75"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="76"/>
         <source>Spatial resolution: {0:.2f} m</source>
         <translation>Resolução espacial: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="77"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
         <source>meters</source>
         <translation>metros</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="77"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
         <source>degrees</source>
         <translation>graus</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="79"/>
         <source>DEM units: {0}</source>
         <translation>Unidades do MDE: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="100"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="101"/>
         <source>Station {0}</source>
         <translation>Estação {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="103"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="104"/>
         <source>Select a sensor...</source>
         <translation>Selecione um sensor...</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="112"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="113"/>
         <source>Select an observation...</source>
         <translation>Selecione uma observação...</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="118"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="119"/>
         <source>Observation {0}</source>
         <translation>Observação {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="126"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="151"/>
         <source>Helmert Algorithm</source>
         <translation>Método de Helmert</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="127"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="152"/>
         <source>Analytical Algorithm</source>
         <translation>Método Analítico</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="128"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="153"/>
         <source>Combined Algorithm</source>
         <translation>Método Combinado</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="137"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="162"/>
         <source>Select an algorithm...</source>
         <translation>Selecione um método...</translation>
     </message>
@@ -202,77 +219,173 @@
 <context>
     <name>Observation</name>
     <message>
-        <location filename="../Core/Observation/observation.py" line="74"/>
+        <location filename="../Core/Observation/observation.py" line="81"/>
         <source>Invalid parameters. It must be a map of attributes.</source>
         <translation>Parâmetros inválidos. Forneça um mapa dos atributos.</translation>
     </message>
     <message>
-        <location filename="../Core/Observation/observation.py" line="76"/>
+        <location filename="../Core/Observation/observation.py" line="83"/>
         <source>Invalid ID.</source>
         <translation>ID inválido.</translation>
     </message>
     <message>
-        <location filename="../Core/Observation/observation.py" line="80"/>
+        <location filename="../Core/Observation/observation.py" line="87"/>
         <source>Invalid azimuth angle.</source>
         <translation>Ângulo de azimute inválido.</translation>
     </message>
     <message>
-        <location filename="../Core/Observation/observation.py" line="84"/>
+        <location filename="../Core/Observation/observation.py" line="91"/>
         <source>Invalid zenith angle.</source>
         <translation>Ângulo de zênite inválido.</translation>
     </message>
     <message>
-        <location filename="../Core/Observation/observation.py" line="88"/>
+        <location filename="../Core/Observation/observation.py" line="95"/>
         <source>Invalid sensor ID.</source>
         <translation>ID do sensor inválido.</translation>
     </message>
     <message>
-        <location filename="../Core/Observation/observation.py" line="91"/>
+        <location filename="../Core/Observation/observation.py" line="98"/>
         <source>Invalid event date.</source>
         <translation>Data de ocorrência do evento inválida.</translation>
     </message>
 </context>
 <context>
+    <name>ObservationWidget</name>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="20"/>
+        <source>Event Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="37"/>
+        <source>Observation</source>
+        <translation type="unfinished">Observação</translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="94"/>
+        <source>Vertical angle: {0:.2f}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="101"/>
+        <source>Azimuth: {0:.2f}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="108"/>
+        <source>Observation date: {date}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.ui" line="115"/>
+        <source>Observed from: {sensorName}</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Sensor</name>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="66"/>
+        <location filename="../Core/Sensor/sensor.py" line="73"/>
         <source>Invalid parameters. It must be a map of attributes.</source>
         <translation>Parâmetros inválidos. Forneça um mapa dos atributos.</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="68"/>
+        <location filename="../Core/Sensor/sensor.py" line="75"/>
         <source>Invalid ID.</source>
         <translation>ID inválido.</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="71"/>
+        <location filename="../Core/Sensor/sensor.py" line="78"/>
         <source>Invalid sensor&apos;s base friendly name.</source>
         <translation>Nome amigável para o sensor inválido.</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="74"/>
+        <location filename="../Core/Sensor/sensor.py" line="81"/>
         <source>Invalid coordinates.</source>
         <translation>Coordenadas inválidas.</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="76"/>
+        <location filename="../Core/Sensor/sensor.py" line="85"/>
         <source>Invalid CRS (EPSG code is not valid).</source>
         <translation>SRC inválido (SRID inválido).</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="79"/>
+        <location filename="../Core/Sensor/sensor.py" line="88"/>
         <source>Invalid activation date.</source>
         <translation>Data de ativação inválida.</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="82"/>
+        <location filename="../Core/Sensor/sensor.py" line="91"/>
         <source>Invalid deactivation date.</source>
         <translation>Data de desativação inválida.</translation>
     </message>
     <message>
-        <location filename="../Core/Sensor/sensor.py" line="84"/>
+        <location filename="../Core/Sensor/sensor.py" line="93"/>
         <source>Invalid status.</source>
         <translation>Status inválido.</translation>
+    </message>
+    <message>
+        <location filename="../Core/Sensor/sensor.py" line="83"/>
+        <source>Invalid set of coordinates (it must be planimetric AND height.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SensorWidget</name>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="20"/>
+        <source>Sensor Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="37"/>
+        <source>Sensor</source>
+        <translation type="unfinished">Receptor</translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="83"/>
+        <source>Activation Date: {date}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="90"/>
+        <source>Deactivation date: {date}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="101"/>
+        <source>{axisY}: {y}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="108"/>
+        <source>{axisX}: {x}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="115"/>
+        <source>Altitude: {0:.2f}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="124"/>
+        <source>CRS: {crs}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="144"/>
+        <source>Status: &lt;font color=&quot;red&quot;&gt;{status}&lt;/font&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

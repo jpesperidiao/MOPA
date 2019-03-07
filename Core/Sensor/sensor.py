@@ -35,7 +35,7 @@ class Sensor(QObject):
             self.parameters = {
                 'id' : None,
                 'name' : '',
-                'coordinates' : (0., 0.),
+                'coordinates' : (0., 0., 0.),
                 'epsg' : 0,
                 'activation_date' : '',
                 'deactivation_date' : '',
@@ -79,6 +79,8 @@ class Sensor(QObject):
         if 'coordinates' not in parameters or type(parameters['coordinates']) not in (list, tuple)\
             or not sum([type(coordinate) in (int, float) for coordinate in parameters['coordinates']]):
             return self.tr("Invalid coordinates.")
+        if len(parameters['coordinates']) < 3:
+            return self.tr("Invalid set of coordinates (it must be planimetric AND height.")
         if 'epsg' not in parameters or not isinstance(parameters['epsg'], int):
             return self.tr("Invalid CRS (EPSG code is not valid).")
         if 'activation_date' not in parameters or \
