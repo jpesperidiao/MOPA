@@ -59,7 +59,7 @@ class SensorsManager():
             param['epsg'] = int(param['epsg'])
         return Sensor(param)
 
-    def getNewSensor(self):
+    def newSensor(self):
         """
         Gets a fresh and empty insance of a sensor.
         :return: (Sensor) new sensor.
@@ -150,6 +150,14 @@ class SensorsManager():
         """
         Removes sensor from database.
         :param sensor: (Sensor) sensor to be removed from database.
+        """
+        # TODO
+        pass
+
+    def updateSensor(self, parameters):
+        """
+        Updates the attribute values for a given sensor into the database.
+        :parameters: (dict) map of attributes of a sensor.
         """
         # TODO
         pass

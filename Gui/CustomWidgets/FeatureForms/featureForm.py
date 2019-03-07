@@ -23,9 +23,10 @@
 
 from os import path
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit
 
+from Core.enums import Enums
 from Core.Sensor.sensorsManager import SensorsManager
 
 FORM_CLASS, _ = uic.loadUiType(path.join(path.dirname(__file__), "featureForm.ui"))
@@ -93,7 +94,7 @@ class FeatureForm(QDialog, FORM_CLASS):
         :return: (dict) all attributes read from form (which will come as strings!).
         """
         attributes = dict()
-        for attr, wMap in self.widgets:
+        for attr, wMap in self.widgets.items():
             attributes[attr] = wMap["lineEdit"].text()
         return attributes
 
@@ -116,3 +117,17 @@ class FeatureForm(QDialog, FORM_CLASS):
             self.widgets[attribute]['lineEdit'].setText(value)
             return True
         return False
+
+    @pyqtSlot(bool, name="on_okPushButton_clicked")
+    @pyqtSlot(bool, name="on_cancelPushButton_clicked")
+    def finish(self):
+        """
+        Closes the form and emit the proper execution code.
+        """
+        code = {
+            self.tr('Ok') : Enums.Finished,
+            self.tr('Cancel') : Enums.Cancelled,
+        }[self.sender().text()]
+        self.done(code)
+        return code
+    

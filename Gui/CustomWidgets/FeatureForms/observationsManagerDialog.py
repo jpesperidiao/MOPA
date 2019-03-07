@@ -36,14 +36,6 @@ class ObservationsManagerDialog():
         self.parent = parent
         self._observationManager = ObservationsManager(settings)
 
-    # def observation(self, obsId):
-    #     """
-    #     Gets an observation from the database given its ID.
-    #     :param obsId: (int) a observation ID.
-    #     :return: (Observation) the onservation object.
-    #     """
-    #     return self._observationManager.observationFromId(obsId)
-
     def openForm(self, obs=None, isEditable=True):
         """
         Opens attribute form for a given observation. Updates observation if necessary.

@@ -27,6 +27,8 @@ class Enums:
     # database drivers enumerates
     TotalDatabaseDrivers = 1
     NoDatabase, SQLite3 = list(range(TotalDatabaseDrivers + 1))
+    # execution codes
+    Finished, FinishedWithErrors, Cancelled = list(range(3))
     # approximation of earth radius in meters
     EARTH_RADIUS = 6378100
     PI = math.pi
