@@ -70,7 +70,8 @@ class FeatureForm(QDialog, FORM_CLASS):
                 widgets["label"] = QLabel(attr)
                 widgets["lineEdit"] = QLineEdit()
                 widgets["lineEdit"].setText(
-                        self.feature[attr] if isinstance(self.feature[attr], str) \
+                        '' if self.feature[attr] is None \
+                            else self.feature[attr] if isinstance(self.feature[attr], str) \
                             else str(self.feature[attr])
                     )
                 widgets["lineEdit"].setReadOnly(self.isEditable)

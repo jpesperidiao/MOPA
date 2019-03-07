@@ -44,7 +44,7 @@ class Observation(QObject):
             self.parameters = {
                 'id' : None,
                 'azimuth' : 0.,
-                'zenith' : 0,
+                'zenith' : 0.,
                 'sensorId' : None,
                 'date' : ''
             }
