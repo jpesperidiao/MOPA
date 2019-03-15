@@ -1,6 +1,6 @@
 ---
 name: New project management ticket
-about: Describe this issue template's purpose here.
+about: Issue card for project management purposes.
 title: ''
 labels: reclassification needed
 assignees: jpesperidiao
