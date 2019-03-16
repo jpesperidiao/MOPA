@@ -48,7 +48,6 @@ class MainWindow(QMainWindow, FORMCLASS):
         self.raster = RasterLayer()
         self.terrain = Terrain()
         self.visualizePushButton.setEnabled(False)
-        self.sensors = dict()
         self.setMethods()
 
     @pyqtSlot(bool, name='on_demPushButton_clicked')
@@ -62,7 +61,6 @@ class MainWindow(QMainWindow, FORMCLASS):
         self.visualizePushButton.setEnabled(self.raster is not None)
         if dem != "":
             self.raster.setRaster(dem)
-            self.sensors = self.getAllSensorsFromRaster(self.raster)
             self.setupSensors()
             self.visualizePushButton.setEnabled(self.raster.isValid())
             self.groupBox.setTitle(self.tr("DEM information: {0}").format(self.raster.name()))
@@ -90,57 +88,51 @@ class MainWindow(QMainWindow, FORMCLASS):
         """
         test.
         """
-        return SensorsManager().getSensorsInsideRaster(dem)
+        return list(SensorsManager().getSensorsInsideRaster(dem).values())
 
     def setupSensors(self):
         """
         test.
         """
-        self.sensorComboBox.clear()
-        sensors = [
-                (s['name'] if s['name'] else self.tr("Station {0}").format(sid)) + " (ID = {0})".format(sid)\
-                for sid, s in self.sensors.items()
-            ]
-        sensors.insert(0, self.tr('Select a sensor...'))
-        self.sensorComboBox.addItems(sensors)
+        self.sensorWidget.refresh(self.getAllSensorsFromRaster(self.raster))
 
-    @pyqtSlot(int, name='on_sensorComboBox_currentIndexChanged')
-    def setupObservations(self, idx):
-        """
-        test.
-        """
-        self.obsComboBox.clear()
-        self.obsComboBox.addItems([self.tr('Select an observation...')])
-        if idx > 0:
-            obs = set()
-            sid = int(self.sensorComboBox.currentText().split("ID = ")[-1].split(")")[0])
-            for o in ObservationsManager().getObservationsFromSensor(sid):
-                obs.add(o)
-            self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])
+    # @pyqtSlot(int, name='on_sensorComboBox_currentIndexChanged')
+    # def setupObservations(self, idx):
+    #     """
+    #     test.
+    #     """
+    #     self.obsComboBox.clear()
+    #     self.obsComboBox.addItems([self.tr('Select an observation...')])
+    #     if idx > 0:
+    #         obs = set()
+    #         sid = int(self.sensorComboBox.currentText().split("ID = ")[-1].split(")")[0])
+    #         for o in ObservationsManager().getObservationsFromSensor(sid):
+    #             obs.add(o)
+    #         self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])
 
-    @pyqtSlot(int, name='on_obsComboBox_currentIndexChanged')
-    def checkEditingObservation(self):
-        """
-        Checks whether current observations may be editted.
-        """
-        self.updateObservationPushButton.setEnabled(self.obsComboBox.currentIndex() > 0)
+    # @pyqtSlot(int, name='on_obsComboBox_currentIndexChanged')
+    # def checkEditingObservation(self):
+    #     """
+    #     Checks whether current observations may be editted.
+    #     """
+    #     self.updateObservationPushButton.setEnabled(self.obsComboBox.currentIndex() > 0)
 
-    @pyqtSlot(bool, name="on_updateObservationPushButton_clicked")
-    def updateObservation(self):
-        """
-        [TEST] Updates an observation in the database.
-        """
-        if self.obsComboBox.currentIndex() > 0:
-            obsId = int(self.obsComboBox.currentText().split(" ")[-1])
-            obs = ObservationsManager().allObservations()[obsId]
-            ObservationsManagerDialog().openForm(obs)
+    # @pyqtSlot(bool, name="on_updateObservationPushButton_clicked")
+    # def updateObservation(self):
+    #     """
+    #     [TEST] Updates an observation in the database.
+    #     """
+    #     if self.obsComboBox.currentIndex() > 0:
+    #         obsId = int(self.obsComboBox.currentText().split(" ")[-1])
+    #         obs = ObservationsManager().allObservations()[obsId]
+    #         ObservationsManagerDialog().openForm(obs)
 
-    @pyqtSlot(bool, name="on_addObservationPushButton_clicked")
-    def addObservation(self):
-        """
-        [TEST] Adds an observation to the database.
-        """
-        ObservationsManagerDialog().openForm()
+    # @pyqtSlot(bool, name="on_addObservationPushButton_clicked")
+    # def addObservation(self):
+    #     """
+    #     [TEST] Adds an observation to the database.
+    #     """
+    #     ObservationsManagerDialog().openForm()
 
     def methodNameMap(self):
         """
@@ -175,10 +167,10 @@ class MainWindow(QMainWindow, FORMCLASS):
                 obs = ObservationsManager().allObservations()[obsId]
                 sid = int(self.sensorComboBox.currentText().split("ID = ")[-1].split(")")[0])
                 sensor = SensorsManager().getSensorFromId(sid)
-                now = time()
+                start = time()
                 shooters = ShooterFinder().findShooter(idx - 1, sensor, obs, self.raster)
                 sd = SummaryDialog()
-                sd.setSummary(self.methodComboBox.currentText(), self.raster, sensor, obs, shooters, time() - now)
+                sd.setSummary(self.methodComboBox.currentText(), self.raster, sensor, obs, shooters, time() - start)
                 sd.exec_()
         except:
             pass

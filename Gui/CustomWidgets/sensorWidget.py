@@ -39,7 +39,7 @@ FORM_CLASS, _ = uic.loadUiType(
 class SensorWidget(QWidget, FORM_CLASS):
     sensorAdded, sensorEdited = pyqtSignal(Sensor), pyqtSignal(Sensor)
     selectionChanged = pyqtSignal(int)
-    def __init__(self, settings=None, parent=None):
+    def __init__(self, parent=None, settings=None):
         """
         Class constructor.
         :param parent: (QWidget) any widget from Qt5 parent to this dialog.
@@ -57,13 +57,11 @@ class SensorWidget(QWidget, FORM_CLASS):
         :param sensorsList: (list-of-Sensor) sensors to be listed on widget.
         """
         self.sensorComboBox.addItem(self.tr("Select a sensor..."))
-        self.sensorComboBox.addItems([])
-        # l = [
-        #     "{0} (ID = {1})".format(
-        #             s['name'] or self.tr("Station {0}").format(s['id'])),
-        #             s['id']
-        #         ) for s in sensorsList
-        # ]
+        self.sensorComboBox.addItems([
+            "{0} (ID = {1})".format(
+                    s['name'] or self.tr("Station {0}").format(s['id']), s['id']
+                ) for s in sensorsList
+        ])
 
     def clear(self):
         """
@@ -136,17 +134,24 @@ class SensorWidget(QWidget, FORM_CLASS):
             statusText = '<font color="red">{status}</font>'.format(status=self.tr("inactive"))
         self.statusLabel.setText(self.tr("Status: {st}").format(st=statusText))
         self.crsLabel.setText(self.tr("CRS: {0}").format(sensor['crs']))
-        self.onLabel.setText(sensor['activation_date'])
-        self.offLabel.setText(sensor['deactivation_date'] or "-")
+        onDate = self.tr("Activation date: {0}").format(sensor['activation_date'] or "-")
+        self.onLabel.setText(onDate)
+        offDate = self.tr("Deactivation date: {0}").format(sensor['deactivation_date'] or "-")
+        self.offLabel.setText(offDate)
+        if sensor.isValid():
+            x, y, z = sensor['coordinates']
+        else:
+            x, y, z = ('-', '-', '-')
+        self.zLabel.setText(self.tr("Altitude: {0} m").format(z))
 
     def isEditable(self):
         """
         Verifies whether current selection may be edited.
         :return: (bool) edition status.
         """
-        return self.sensorComboBox.currentIndex() < 1
+        return not self.sensorComboBox.currentIndex() < 1
 
-    @pyqtSlot(bool, name="on_sensorComboBox_currentIndexChanged")
+    @pyqtSlot(int, name="on_sensorComboBox_currentIndexChanged")
     def checkEditButtonStatus(self):
         """
         Updates the edit push button enable status.
@@ -162,13 +167,11 @@ class SensorWidget(QWidget, FORM_CLASS):
         pass
         
     @pyqtSlot(bool, name='on_addSensorPushButton_clicked')
-    def openForm(self, isEditable=True):
+    def openForm(self):
         """
-        Opens attribute form for a given observation. Updates observation if necessary.
-        :param sensor: (Observation) the observation to have its attributes exposed.
-        :param isEditable: (bool) indicates whether attributes may be updated.
+        Opens attribute form to be filled in order to add a new sensor.
         """
-        form = FeatureForm(self._sensorsManager.newSensor(), isEditable, self.parent)
+        form = FeatureForm(self._sensorsManager.newSensor(), True, self.parent)
         # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
         if form.exec_() == Enums.Finished:
             attributes = form.read()
