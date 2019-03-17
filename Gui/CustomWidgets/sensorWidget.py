@@ -159,12 +159,14 @@ class SensorWidget(QWidget, FORM_CLASS):
         return not self.sensorComboBox.currentIndex() < 1
 
     @pyqtSlot(int, name="on_sensorComboBox_currentIndexChanged")
-    def checkEditButtonStatus(self):
+    def checkEditButtonStatus(self, idx):
         """
         Updates the edit push button enable status.
+        :param idx: (int) current index.
         """
         self.updateSensorPushButton.setEnabled(self.isEditable())
         self.setSensorInformation(self.sensor())
+        self.selectionChanged.emit(idx)
 
     @pyqtSlot(bool, name='on_updateSensorPushButton_clicked')
     def openEditForm(self):
@@ -175,8 +177,9 @@ class SensorWidget(QWidget, FORM_CLASS):
         # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
         if form.exec_() == Enums.Finished:
             attributes = form.read()
-            self._sensorsManager.updateSensor(
-                sensor
+            self._sensorsManager.updateSensor(attributes)
+            self.sensorEdited.emit(
+                self._sensorsManager.getSensorFromId(attributes['id'])
             )
         
     @pyqtSlot(bool, name='on_addSensorPushButton_clicked')
@@ -193,4 +196,7 @@ class SensorWidget(QWidget, FORM_CLASS):
                 attributes['epsg'],
                 attributes['name'],
                 attributes['status']
+            )
+            self.sensorAdded.emit(
+                self._sensorsManager.getSensorFromId(attributes['id'])
             )

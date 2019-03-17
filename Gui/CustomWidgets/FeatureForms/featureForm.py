@@ -68,16 +68,16 @@ class FeatureForm(QDialog, FORM_CLASS):
         for row, attr in enumerate(self.feature.attributes()):
             if attr not in widgets:
                 widgets[attr] = dict()
-                widgets["label"] = QLabel(attr)
-                widgets["lineEdit"] = QLineEdit()
-                widgets["lineEdit"].setText(
+                widgets[attr]["label"] = QLabel(attr)
+                widgets[attr]["lineEdit"] = QLineEdit()
+                widgets[attr]["lineEdit"].setText(
                         '' if self.feature[attr] is None \
                             else self.feature[attr] if isinstance(self.feature[attr], str) \
                             else str(self.feature[attr])
                     )
-                widgets["lineEdit"].setReadOnly(not self.isEditable)
-                self.attributesGridLayout.addWidget(widgets["label"], row, 0)
-                self.attributesGridLayout.addWidget(widgets["lineEdit"], row, 1)
+                widgets[attr]["lineEdit"].setReadOnly(not self.isEditable)
+                self.attributesGridLayout.addWidget(widgets[attr]["label"], row, 0)
+                self.attributesGridLayout.addWidget(widgets[attr]["lineEdit"], row, 1)
         return widgets
 
     def setEditable(self, active):
