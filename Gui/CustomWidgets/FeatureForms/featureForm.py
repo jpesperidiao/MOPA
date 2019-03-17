@@ -75,7 +75,7 @@ class FeatureForm(QDialog, FORM_CLASS):
                             else self.feature[attr] if isinstance(self.feature[attr], str) \
                             else str(self.feature[attr])
                     )
-                widgets["lineEdit"].setReadOnly(self.isEditable)
+                widgets["lineEdit"].setReadOnly(not self.isEditable)
                 self.attributesGridLayout.addWidget(widgets["label"], row, 0)
                 self.attributesGridLayout.addWidget(widgets["lineEdit"], row, 1)
         return widgets
@@ -104,7 +104,7 @@ class FeatureForm(QDialog, FORM_CLASS):
         """
         for attr, wMap in self.widgets.items():
             wMap['lineEdit'].setText(self.feature[attr])
-            wMap['lineEdit'].setEditable(self.isEditable)
+            widgets["lineEdit"].setReadOnly(not self.isEditable)
 
     def updateAttribute(self, attribute, value):
         """

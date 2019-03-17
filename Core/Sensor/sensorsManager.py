@@ -154,10 +154,10 @@ class SensorsManager():
         # TODO
         pass
 
-    def updateSensor(self, parameters):
+    def updateSensor(self, sensor):
         """
         Updates the attribute values for a given sensor into the database.
-        :parameters: (dict) map of attributes of a sensor.
+        :param sensor: (Sensor) sensor to be updated on the database.
         """
         # TODO
         pass

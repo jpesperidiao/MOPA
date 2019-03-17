@@ -171,7 +171,13 @@ class SensorWidget(QWidget, FORM_CLASS):
         """
         Opens feature form for current selection in edition mode.
         """
-        pass
+        form = FeatureForm(self.sensor(), True, self.parent)
+        # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
+        if form.exec_() == Enums.Finished:
+            attributes = form.read()
+            self._sensorsManager.updateSensor(
+                sensor
+            )
         
     @pyqtSlot(bool, name='on_addSensorPushButton_clicked')
     def openForm(self):
