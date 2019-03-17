@@ -71,7 +71,10 @@ class GeoprocessingTools:
         :param epsg: (int) CRS' auth ID.
         :return: (str) projection's name.
         """
-        # TODO
+        if epsg and GeoprocessingTools.epsgToWkt(epsg):
+            return "{0} (EPSG:{1})".format(
+                    GeoprocessingTools.epsgToWkt(epsg).split(',')[0].split('"')[1], epsg
+                )
         return ""
 
     @staticmethod

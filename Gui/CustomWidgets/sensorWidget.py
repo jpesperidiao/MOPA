@@ -28,6 +28,7 @@ from PyQt5.QtWidgets import QWidget
 
 from Settings.settings import Settings
 from Core.enums import Enums
+from Core.ProcessingTools.geoprocessingTools import GeoprocessingTools
 from Core.Sensor.sensorsManager import SensorsManager
 from Core.Sensor.sensor import Sensor
 from Gui.CustomWidgets.FeatureForms.featureForm import FeatureForm
@@ -133,15 +134,21 @@ class SensorWidget(QWidget, FORM_CLASS):
         else:
             statusText = '<font color="red">{status}</font>'.format(status=self.tr("inactive"))
         self.statusLabel.setText(self.tr("Status: {st}").format(st=statusText))
-        self.crsLabel.setText(self.tr("CRS: {0}").format(sensor['crs']))
+        self.crsLabel.setText(self.tr("CRS: {0}").format(
+                                    GeoprocessingTools.projectionFromEpsg(sensor['epsg']) or '-'
+                                )
+                            )
         onDate = self.tr("Activation date: {0}").format(sensor['activation_date'] or "-")
         self.onLabel.setText(onDate)
         offDate = self.tr("Deactivation date: {0}").format(sensor['deactivation_date'] or "-")
         self.offLabel.setText(offDate)
-        if sensor.isValid():
-            x, y, z = sensor['coordinates']
+        x, y, z = sensor['coordinates'] if sensor.isValid() else ('-', '-', '-')
+        if sensor['epsg'] and GeoprocessingTools.isGeographic(sensor['epsg']):
+            axisX, axisY = self.tr("Longitude"), self.tr("Latitude")
         else:
-            x, y, z = ('-', '-', '-')
+            axisX, axisY = self.tr("Easting"), self.tr("Northing")
+        self.xLabel.setText(self.tr("{0}: {1}").format(axisX, x))
+        self.yLabel.setText(self.tr("{0}: {1}").format(axisY, y))
         self.zLabel.setText(self.tr("Altitude: {0} m").format(z))
 
     def isEditable(self):
