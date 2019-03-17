@@ -45,6 +45,26 @@ class GeoprocessingTools:
         return osr.SpatialReference(GeoprocessingTools.epsgToWkt(epsg))
 
     @staticmethod
+    def isProjected(epsg):
+        """
+        Determines whether raster has a projected CRS.
+        :param epsg: (int) CRS' auth ID.
+        :return: (bool) if CRS is projected.
+        """
+        srs = osr.SpatialReference(wkt=GeoprocessingTools.epsgToWkt(epsg))
+        return bool(srs.IsProjected())
+
+    @staticmethod
+    def isGeographic(epsg):
+        """
+        Determines whether raster has a geographic CRS.
+        :param epsg: (int) CRS' auth ID.
+        :return: (bool) if CRS is projected.
+        """
+        srs = osr.SpatialReference(wkt=GeoprocessingTools.epsgToWkt(epsg))
+        return bool(srs.IsGeographic())
+
+    @staticmethod
     def projectionFromEpsg(epsg):
         """
         Gets the projection name from its authentication ID.

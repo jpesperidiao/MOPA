@@ -70,7 +70,7 @@ class MainWindow(QMainWindow, FORMCLASS):
             self.minLabel.setText(self.tr("Min. altitude: {0:.2f} m").format(self.raster.min()))
             self.heightLabel.setText(self.tr("Raster height: {0}").format(self.raster.height()))
             self.widthLabel.setText(self.tr("Raster width: {0}").format(self.raster.width()))
-            reso =  self.tr("Spatial resolution: {0:.2f} m (detected)") if not self.raster.isGeographic()\
+            reso =  self.tr("Spatial resolution: {0:.2f} m (detected)") if self.raster.isGeographic()\
                  else self.tr("Spatial resolution: {0:.2f} m")
             self.resLabel.setText(reso.format(self.raster.spatialResolution()))
             units = self.tr("meters") if not self.raster.isGeographic() else self.tr("degrees")
