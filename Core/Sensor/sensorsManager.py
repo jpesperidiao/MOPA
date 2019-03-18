@@ -59,6 +59,15 @@ class SensorsManager():
             param['epsg'] = int(param['epsg'])
         return Sensor(param)
 
+    def sensorFromAttributes(self, parameters):
+        """
+        Gets a Sensor instance based on a set of attributes.
+        :param paremteres: (dict) attribute set.
+        :return: (Sensor) a sensor instance if attribute set is valid, or a blank instance.
+        """
+        s = Sensor(parameters)
+        return s if s.isValid() else self.newSensor()
+
     def newSensor(self):
         """
         Gets a fresh and empty insance of a sensor.
