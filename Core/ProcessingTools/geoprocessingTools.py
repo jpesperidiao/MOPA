@@ -85,7 +85,6 @@ class GeoprocessingTools:
         :param outputCrs: (int) auth ID for output CRS.
         :return: () coordinate transformer.
         """
-        # TODO
         return osr.CoordinateTransformation(
             GeoprocessingTools.srsFromEpsg(inputEpsg),
             GeoprocessingTools.srsFromEpsg(outputEpsg)
@@ -98,16 +97,20 @@ class GeoprocessingTools:
         :return: (GDALDatasetShadow) gdal dataset object reprojected to output CRS.
         """
         # TODO
-        return None
+        return gdal.Warp(out, dataset, dstSRS='EPSG:{0}'.format(outputCrs))
     
     @staticmethod
     def reprojectCoordinates(coordinates, inputCrs, outputCrs):
         """
-        Reproject a tuple of coordinates (y, x[, z]) to output CRS.
+        Reproject a tuple of coordinates (y, x, z) to output CRS.
         :param coordinates: (tuple-of-float) coordinates to be reprojected in the shape (y, x[, z]).
         :param inputCrs: (int) auth ID for input CRS.
         :param outputCrs: (int) auth ID for output CRS.
         :return: (tuple-of-float) reprojected coordinates.
         """
-        # TODO
-        return (None, None) if len(coordinates) == 2 else (None, None, coordinates[2])
+        if inputCrs == outputCrs:
+            return coordinates
+        transformer = GeoprocessingTools.coordinateTransformer(inputCrs, outputCrs)
+        y, x, z = coordinates
+        x, y, z = transformer.TransformPoint(x, y, z)
+        return (y, x, z)
