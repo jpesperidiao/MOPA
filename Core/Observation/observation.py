@@ -104,3 +104,10 @@ class Observation(QObject):
         :return: (bool) validity status.
         """
         return self.invalidationReason(parameters) == ""
+
+    def isValid(self):
+        """
+        Validates current instance's parameters.
+        :return: (bool) validity status.
+        """
+        return self.validateParameters(self.parameters)

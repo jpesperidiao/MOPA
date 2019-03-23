@@ -55,6 +55,7 @@ class MainWindow(QMainWindow, FORMCLASS):
         self.terrain = Terrain()
         self.visualizePushButton.setEnabled(False)
         self.setMethods()
+        self.setupObservations()
         self.setupSensors()
 
     @pyqtSlot(bool, name='on_demPushButton_clicked')
@@ -93,32 +94,44 @@ class MainWindow(QMainWindow, FORMCLASS):
 
     def getAllSensorsFromRaster(self, dem):
         """
-        test.
+        Retrieves all sensors inside of a DEM.
+        :param dem: (RasterLayer) DEM to be checked for sensors.
+        :return: (list-of-Sensor)
         """
         return list(SensorsManager().getSensorsInsideRaster(dem).values())
 
     def setupSensors(self):
         """
-        test.
+        Sets sensors to GUI.
         """
         if self.raster.isValid():
             self.sensorWidget.refresh(self.getAllSensorsFromRaster(self.raster))
         else:
             self.sensorWidget.refresh(SensorsManager().allSensors().values())
 
-    # @pyqtSlot(int, name='on_sensorComboBox_currentIndexChanged')
-    # def setupObservations(self, idx):
-    #     """
-    #     test.
-    #     """
-    #     self.obsComboBox.clear()
-    #     self.obsComboBox.addItems([self.tr('Select an observation...')])
-    #     if idx > 0:
-    #         obs = set()
-    #         sid = int(self.sensorComboBox.currentText().split("ID = ")[-1].split(")")[0])
-    #         for o in ObservationsManager().getObservationsFromSensor(sid):
-    #             obs.add(o)
-    #         self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])
+    def getAllObsFromSensor(self, sensor=None):
+        """
+        Retrieves all observations made from a sensor.
+        :param dem: (RasterLayer) DEM to be checked for sensors.
+        :return: (list-of-Sensor)
+        """
+        sensor = sensor or (self.sensorWidget.currentSensor() or \
+                 SensorsManager().newSensor())
+        if self.sensorWidget.currentSensor().isValid():
+            return ObservationsManager().getObservationsFromSensor(
+                self.sensorWidget.currentSensor()['id']
+            )
+        else:
+            return ObservationsManager().allObservations()
+
+    def setupObservations(self):
+        """
+        Sets observations to GUI.
+        """
+        if self.raster.isValid():
+            self.obsWidget.refresh(self.getAllObsFromSensor())
+        else:
+            self.obsWidget.refresh(ObservationsManager().allObservations().values())
 
     # @pyqtSlot(int, name='on_obsComboBox_currentIndexChanged')
     # def checkEditingObservation(self):
