@@ -24,6 +24,7 @@
 from Settings.settings import Settings
 from .sensor import Sensor
 from Core.Observation.observationsManager import ObservationsManager
+from Core.ProcessingTools.geoprocessingTools import GeoprocessingTools
 
 class SensorsManager():
     """
@@ -164,9 +165,12 @@ class SensorsManager():
             param['status'] = bool(param['status'])
             param['id'] = int(param['id'])
             param['epsg'] = int(param['epsg'])
-            if param ['epsg'] != epsg:
-                # for now, just ignore, later reprojection should be applied
-                continue
+            if param['epsg']!= 0 and param['epsg'] != epsg:
+                reprojectedCoord = GeoprocessingTools.reprojectCoordinates(
+                    param['coordinates'], param['epsg'], epsg
+                )
+                if raster.hasPoint(reprojectedCoord):
+                    sensors[param['id']] = Sensor(param)
             elif raster.hasPoint(param['coordinates']):
                 sensors[param['id']] = Sensor(param)
         return sensors

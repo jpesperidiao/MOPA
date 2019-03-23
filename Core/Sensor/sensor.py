@@ -36,7 +36,7 @@ class Sensor(QObject):
                 'id' : None,
                 'name' : '',
                 'coordinates' : (0., 0., 0.),
-                'epsg' : 0,
+                'epsg' : 4326,
                 'activation_date' : '',
                 'deactivation_date' : '',
                 'status' : False
