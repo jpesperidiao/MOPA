@@ -50,5 +50,9 @@ SOURCES         =	Settings/__init__.py \
 
  TRANSLATIONS   =   i18n/mopa_pt.ts
 
-RESOURCES += resources.qrc \
-             resources_rc.qrc
+ RC_ICONS       =   Icons/icon.ico
+
+ ICON           =   Icons/icon.ico
+
+ RESOURCES += resources.qrc \
+              resources_rc.qrc

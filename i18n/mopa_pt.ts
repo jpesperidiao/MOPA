@@ -19,6 +19,24 @@
     </message>
 </context>
 <context>
+    <name>FeatureForm</name>
+    <message>
+        <location filename="../Gui/CustomWidgets/FeatureForms/featureForm.py" line="147"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/FeatureForms/featureForm.py" line="148"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/FeatureForms/featureForm.py" line="155"/>
+        <source>Invalid attribute!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.ui" line="14"/>
@@ -26,72 +44,72 @@
         <translation>MOPA</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="21"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="137"/>
         <source>DEM Information</source>
         <translation>Informação de MDE</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="27"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="257"/>
         <source>Raster width: </source>
         <translation>Largura do raster: </translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="34"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="264"/>
         <source>Raster height: </source>
         <translation>Altura do raster: </translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="54"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="183"/>
         <source>Spatial resolution: </source>
         <translation>Resolução espacial: </translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="74"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="176"/>
         <source>CRS name: </source>
         <translation>SRC: </translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="81"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="216"/>
         <source>Coordinates units:</source>
         <translation>Unidades de mapa:</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="101"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="236"/>
         <source>Max. altitude: </source>
         <translation>Altitude máx.: </translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="108"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="243"/>
         <source>Min. altitude: </source>
         <translation>Altitude min.: </translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="131"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="146"/>
         <source>Visualize DEM</source>
         <translation>Visualizar do MDE</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="138"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="153"/>
         <source>Insert DEM</source>
         <translation>Escolher MDE</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="174"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="250"/>
         <source>File path:</source>
         <translation>Diretório:</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="243"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="114"/>
         <source>Find Shooter</source>
         <translation>Encontrar Atirador</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="229"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="100"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="236"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.ui" line="107"/>
         <source>Vis. Shooter</source>
         <translation>Vis. Atirador</translation>
     </message>
@@ -116,102 +134,102 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="68"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="67"/>
         <source>DEM information: {0}</source>
         <translation>Informação de MDE: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="69"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="68"/>
         <source>File path: {0}</source>
         <translation>Diretório: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="70"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="69"/>
         <source>CRS name: {0}</source>
         <translation>SRC: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="71"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="70"/>
         <source>Max. altitude: {0:.2f} m</source>
         <translation>Altitude máx.: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="72"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="71"/>
         <source>Min. altitude: {0:.2f} m</source>
         <translation>Altitude min.: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="73"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="72"/>
         <source>Raster height: {0}</source>
         <translation>Altura do raster: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="74"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="73"/>
         <source>Raster width: {0}</source>
         <translation>Largura do raster: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="75"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="74"/>
         <source>Spatial resolution: {0:.2f} m (detected)</source>
         <translation>Resolução espacial: {0:.2f} m (detectada)</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="76"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="75"/>
         <source>Spatial resolution: {0:.2f} m</source>
         <translation>Resolução espacial: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="77"/>
         <source>meters</source>
         <translation>metros</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="77"/>
         <source>degrees</source>
         <translation>graus</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="79"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
         <source>DEM units: {0}</source>
         <translation>Unidades do MDE: {0}</translation>
     </message>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.py" line="101"/>
         <source>Station {0}</source>
-        <translation>Estação {0}</translation>
+        <translation type="obsolete">Estação {0}</translation>
     </message>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.py" line="104"/>
         <source>Select a sensor...</source>
-        <translation>Selecione um sensor...</translation>
+        <translation type="obsolete">Selecione um sensor...</translation>
     </message>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.py" line="113"/>
         <source>Select an observation...</source>
-        <translation>Selecione uma observação...</translation>
+        <translation type="obsolete">Selecione uma observação...</translation>
     </message>
     <message>
         <location filename="../Gui/CustomWidgets/mainWindow.py" line="119"/>
         <source>Observation {0}</source>
-        <translation>Observação {0}</translation>
+        <translation type="obsolete">Observação {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="151"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="147"/>
         <source>Helmert Algorithm</source>
         <translation>Método de Helmert</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="152"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="148"/>
         <source>Analytical Algorithm</source>
         <translation>Método Analítico</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="153"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="149"/>
         <source>Combined Algorithm</source>
         <translation>Método Combinado</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="162"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="158"/>
         <source>Select an algorithm...</source>
         <translation>Selecione um método...</translation>
     </message>
@@ -385,6 +403,81 @@
     <message>
         <location filename="../Gui/CustomWidgets/sensorWidget.ui" line="144"/>
         <source>Status: &lt;font color=&quot;red&quot;&gt;{status}&lt;/font&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="60"/>
+        <source>Select a sensor...</source>
+        <translation type="unfinished">Selecione um sensor...</translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="61"/>
+        <source>Station {0}</source>
+        <translation type="unfinished">Estação {0}</translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="133"/>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="135"/>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="136"/>
+        <source>Status: {st}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="137"/>
+        <source>CRS: {0}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="141"/>
+        <source>Activation date: {0}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="143"/>
+        <source>Deactivation date: {0}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="147"/>
+        <source>Longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="147"/>
+        <source>Latitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="149"/>
+        <source>Easting</source>
+        <translation type="unfinished">Leste</translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="149"/>
+        <source>Northing</source>
+        <translation type="unfinished">Norte</translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="151"/>
+        <source>{0}: {1}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="152"/>
+        <source>Altitude: {0} m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="204"/>
+        <source>Invalid CRS.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

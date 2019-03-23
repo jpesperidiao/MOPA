@@ -3,5 +3,7 @@
     <file>Icons/save_file.svg</file>
     <file>Icons/add.svg</file>
     <file>Icons/edit.svg</file>
+    <file>Icons/icon.svg</file>
+    <file>Icons/icon.ico</file>
   </qresource>
 </RCC>

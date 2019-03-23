@@ -32,3 +32,5 @@ class Enums:
     # approximation of earth radius in meters
     EARTH_RADIUS = 6378100
     PI = math.pi
+    # default push buttons
+    OkButton, CancelButton = list(range(2))

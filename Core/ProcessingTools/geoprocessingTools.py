@@ -22,7 +22,7 @@
 """
 
 import os
-from osgeo import osr
+from osgeo import osr, gdal
 
 class GeoprocessingTools:
     """

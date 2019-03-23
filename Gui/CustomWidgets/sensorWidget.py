@@ -168,6 +168,43 @@ class SensorWidget(QWidget, FORM_CLASS):
         self.setSensorInformation(self.currentSensor())
         self.selectionChanged.emit(idx)
 
+    def parametersFromForm(self, attributes):
+        """
+        Sets the correct variable types from form info.
+        :param attributes: (dict) form's info.
+        :return: (dict) values reasigned to its correct variable type. 
+        """
+        try:
+            attributes['id'] = int(attributes['id'])
+        except:
+            pass
+        try:
+            attributes['epsg'] = int(attributes['epsg'])
+        except:
+            pass
+        try:
+            attributes['coordinates'] = tuple([
+                    float(n) for n in attributes['coordinates'][1:-1].split(', ')
+                ])
+        except:
+            pass
+        if attributes['status'].lower() in ("true", "false"):
+            attributes['status'] = attributes['status'].lower() == "true"
+        return attributes
+
+    def checkFormValidity(self, form):
+        """
+        Checks form validity.
+        :param form: (FeatureForm) form to have its contents checked.
+        :return: (bool) form validity status.
+        """
+        attr = self.parametersFromForm(form.read())
+        ir = self._sensorsManager.newSensor().invalidationReason(attr)
+        if ir == '' and attr['epsg'] == 0:
+            ir = self.tr("Invalid CRS.")
+        form.setInvalidationMessage(ir)
+        return ir == ''
+
     @pyqtSlot(bool, name='on_updateSensorPushButton_clicked')
     def openEditForm(self):
         """
@@ -175,16 +212,16 @@ class SensorWidget(QWidget, FORM_CLASS):
         """
         form = FeatureForm(self.currentSensor(), True, self.parent)
         # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
+        form.okButtonClicked.connect(self.checkFormValidity)
         if form.exec_() == Enums.Finished:
-            attributes = form.read()
-            self._sensorsManager.updateSensor(attributes)
-            sensor = self._sensorsManager.getSensorFromId(attributes['id'])
+            attr = self.parametersFromForm(form.read())
+            sensor = self._sensorsManager.sensorFromAttributes(attr)
             if sensor.isValid():
+                self._sensorsManager.updateSensor(sensor)
+                form.blockSignals(True)
+                del form
                 self.sensorEdited.emit(sensor)
-            else:
-                # advise use of invalidation reason and keep form open
-                self.openEditForm() # temporary
-        
+
     @pyqtSlot(bool, name='on_addSensorPushButton_clicked')
     def openForm(self):
         """
@@ -192,17 +229,17 @@ class SensorWidget(QWidget, FORM_CLASS):
         """
         form = FeatureForm(self._sensorsManager.newSensor(), True, self.parent)
         # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
+        form.okButtonClicked.connect(self.checkFormValidity)
         if form.exec_() == Enums.Finished:
-            attributes = form.read()
-            sensor = self._sensorsManager.sensorFromAttributes(attributes)
+            attr = self.parametersFromForm(form.read())
+            sensor = self._sensorsManager.sensorFromAttributes(attr)
             if sensor.isValid():
                 self._sensorsManager.addSensor(
-                    attributes['coordinates'],
-                    attributes['epsg'],
-                    attributes['name'],
-                    attributes['status']
+                    sensor['coordinates'],
+                    sensor['epsg'],
+                    sensor['name'],
+                    sensor['status']
                 )
+                form.blockSignals(True)
+                del form
                 self.sensorAdded.emit(sensor)
-            else:
-                # also temporary...
-                self.openForm()

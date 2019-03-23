@@ -24,6 +24,7 @@
 import os
 from time import time
 from PyQt5 import uic
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QMainWindow
 
@@ -45,10 +46,16 @@ class MainWindow(QMainWindow, FORMCLASS):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
+        icon = QIcon(
+            os.path.join(os.path.dirname(__file__), '..', '..', 'Icons', 'icon.svg')
+        )
+        # self.setIcon(icon)
+        self.setWindowIcon(icon)
         self.raster = RasterLayer()
         self.terrain = Terrain()
         self.visualizePushButton.setEnabled(False)
         self.setMethods()
+        self.setupSensors()
 
     @pyqtSlot(bool, name='on_demPushButton_clicked')
     def setDem(self):
@@ -94,7 +101,10 @@ class MainWindow(QMainWindow, FORMCLASS):
         """
         test.
         """
-        self.sensorWidget.refresh(self.getAllSensorsFromRaster(self.raster))
+        if self.raster.isValid():
+            self.sensorWidget.refresh(self.getAllSensorsFromRaster(self.raster))
+        else:
+            self.sensorWidget.refresh(SensorsManager().allSensors().values())
 
     # @pyqtSlot(int, name='on_sensorComboBox_currentIndexChanged')
     # def setupObservations(self, idx):

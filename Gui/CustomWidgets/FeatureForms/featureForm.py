@@ -21,10 +21,11 @@
  ***************************************************************************/
 """
 
+from time import sleep
 from os import path
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox
 
 from Core.enums import Enums
 from Core.Sensor.sensorsManager import SensorsManager
@@ -37,6 +38,7 @@ class FeatureForm(QDialog, FORM_CLASS):
     edition or read-only forms.
     """
     editingModeChanged = pyqtSignal(bool)
+    okButtonClicked = pyqtSignal(QDialog)
     def __init__(self, feature, isEditable=True, parent=None):
         """
         Class constructor.
@@ -48,6 +50,7 @@ class FeatureForm(QDialog, FORM_CLASS):
         self.feature = feature
         self.isEditable = isEditable
         self.parent = parent
+        self._invalidationReason = ""
         self.widgets = self.setupAttributes()
 
     def clearWidgets(self):
@@ -88,6 +91,21 @@ class FeatureForm(QDialog, FORM_CLASS):
         self.isEditable = active
         self.editingModeChanged.emit(active)
 
+    def setInvalidationMessage(self, msg):
+        """
+        Changes the value of invalidation message for the form. If any, it will
+        make the form invalid.
+        :param msg: (msg) invalidation message.
+        """
+        self._invalidationReason = msg
+
+    def invalidationMessage(self):
+        """
+        Gets current invalidation reason from form.
+        :return: (str) invalidation message.
+        """
+        return self._invalidationReason
+
     def read(self):
         """
         Reads form's contents and return as a map to attributes.
@@ -104,7 +122,7 @@ class FeatureForm(QDialog, FORM_CLASS):
         """
         for attr, wMap in self.widgets.items():
             wMap['lineEdit'].setText(self.feature[attr])
-            widgets["lineEdit"].setReadOnly(not self.isEditable)
+            wMap["lineEdit"].setReadOnly(not self.isEditable)
 
     def updateAttribute(self, attribute, value):
         """
@@ -128,6 +146,12 @@ class FeatureForm(QDialog, FORM_CLASS):
             self.tr('Ok') : Enums.Finished,
             self.tr('Cancel') : Enums.Cancelled,
         }[self.sender().text()]
-        self.done(code)
-        return code
+        if code == Enums.OkButton:
+            self.okButtonClicked.emit(self)
+        sleep(.1)
+        if code == Enums.Finished and self.invalidationMessage() != '':
+            mb = QMessageBox(self)
+            QMessageBox.warning(mb, self.tr("Invalid attribute!"), self.invalidationMessage())
+        else:
+            self.done(code)
     
