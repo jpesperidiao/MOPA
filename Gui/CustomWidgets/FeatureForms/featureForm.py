@@ -154,4 +154,3 @@ class FeatureForm(QDialog, FORM_CLASS):
             QMessageBox.warning(mb, self.tr("Invalid attribute!"), self.invalidationMessage())
         else:
             self.done(code)
-    

@@ -192,16 +192,20 @@ class SensorWidget(QWidget, FORM_CLASS):
             attributes['status'] = attributes['status'].lower() == "true"
         return attributes
 
-    def checkFormValidity(self, form):
+    def checkFormValidity(self, form, checkIfExists=False):
         """
         Checks form validity.
         :param form: (FeatureForm) form to have its contents checked.
+        :param checkIfExists: (bool) indicates whether entry existance should be checked.
         :return: (bool) form validity status.
         """
         attr = self.parametersFromForm(form.read())
         ir = self._sensorsManager.newSensor().invalidationReason(attr)
         if ir == '' and attr['epsg'] == 0:
             ir = self.tr("Invalid CRS.")
+        if checkIfExists and self._sensorsManager.idExists(attr['id']):
+            ir = self.tr("Sensor ID {0} already exists into the database.").\
+                format(attr['id'])
         form.setInvalidationMessage(ir)
         return ir == ''
 
@@ -229,7 +233,7 @@ class SensorWidget(QWidget, FORM_CLASS):
         """
         form = FeatureForm(self._sensorsManager.newSensor(), True, self.parent)
         # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
-        form.okButtonClicked.connect(self.checkFormValidity)
+        form.okButtonClicked.connect(lambda f : self.checkFormValidity(f, True))
         if form.exec_() == Enums.Finished:
             attr = self.parametersFromForm(form.read())
             sensor = self._sensorsManager.sensorFromAttributes(attr)
@@ -242,4 +246,8 @@ class SensorWidget(QWidget, FORM_CLASS):
                 )
                 form.blockSignals(True)
                 del form
+                name = "{0} (ID = {1})".format(
+                    sensor['name'] or self.tr("Station {0}").format(sensor['id']), sensor['id']
+                )
+                self.sensorComboBox.addItem(name)
                 self.sensorAdded.emit(sensor)

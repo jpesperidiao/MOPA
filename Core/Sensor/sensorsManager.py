@@ -59,6 +59,22 @@ class SensorsManager():
             param['epsg'] = int(param['epsg'])
         return Sensor(param)
 
+    def sensorExists(self, sensor):
+        """
+        Checks if a sensor exists into database.
+        :param sensor: (Sensor) sensor instance.
+        :return: (bool) if sensor exists into the database.
+        """
+        return self.idExists(sensor['id'])
+
+    def idExists(self, sensorId):
+        """
+        Checks if a sensor exists into database from its ID.
+        :param sensorId: (int) sensor ID to be checked.
+        :return: (bool) if the database has a sensor entry with the given ID.
+        """
+        return sensorId in self.allSensors()
+
     def sensorFromAttributes(self, parameters):
         """
         Gets a Sensor instance based on a set of attributes.
