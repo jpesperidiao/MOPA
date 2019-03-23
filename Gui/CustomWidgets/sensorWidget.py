@@ -44,6 +44,7 @@ class SensorWidget(QWidget, FORM_CLASS):
         """
         Class constructor.
         :param parent: (QWidget) any widget from Qt5 parent to this dialog.
+        :param settings: (Settings) MOPA's settings database manager.
         """
         super(SensorWidget, self).__init__(parent)
         self.setupUi(self)

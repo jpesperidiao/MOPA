@@ -151,6 +151,6 @@ class FeatureForm(QDialog, FORM_CLASS):
         sleep(.1)
         if code == Enums.Finished and self.invalidationMessage() != '':
             mb = QMessageBox(self)
-            QMessageBox.warning(mb, self.tr("Invalid attribute!"), self.invalidationMessage())
+            QMessageBox.warning(self, self.tr("Invalid attribute!"), self.invalidationMessage())
         else:
             self.done(code)
