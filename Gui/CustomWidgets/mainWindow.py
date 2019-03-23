@@ -56,6 +56,7 @@ class MainWindow(QMainWindow, FORMCLASS):
         self.visualizePushButton.setEnabled(False)
         self.setMethods()
         self.setupObservations()
+        self.sensorWidget.selectionChanged.connect(self.setupObservations)
         self.setupSensors()
 
     @pyqtSlot(bool, name='on_demPushButton_clicked')
@@ -128,17 +129,11 @@ class MainWindow(QMainWindow, FORMCLASS):
         """
         Sets observations to GUI.
         """
-        if self.raster.isValid():
-            self.obsWidget.refresh(self.getAllObsFromSensor())
+        s = self.sensorWidget.currentSensor()
+        if s is not None and s.isValid():
+            self.obsWidget.refresh(self.getAllObsFromSensor().values())
         else:
             self.obsWidget.refresh(ObservationsManager().allObservations().values())
-
-    # @pyqtSlot(int, name='on_obsComboBox_currentIndexChanged')
-    # def checkEditingObservation(self):
-    #     """
-    #     Checks whether current observations may be editted.
-    #     """
-    #     self.updateObservationPushButton.setEnabled(self.obsComboBox.currentIndex() > 0)
 
     # @pyqtSlot(bool, name="on_updateObservationPushButton_clicked")
     # def updateObservation(self):
