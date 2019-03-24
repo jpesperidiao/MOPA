@@ -82,8 +82,8 @@ class ObservationWidget(QWidget, FORM_CLASS):
         """
         Gets the observation ID from item at the given index. If index is invalid None
         is returned.
-        :param idx: (int) item index in the sensor selection combo box.
-        :return: (int) sensor ID.
+        :param idx: (int) item index in the observation selection combo box.
+        :return: (int) observation ID.
         """
         if idx > 0 and self.obsComboBox.count() > idx:
             return int(self.obsComboBox.itemText(idx).split(" ")[-1])
@@ -95,15 +95,15 @@ class ObservationWidget(QWidget, FORM_CLASS):
         :param idx: (int) item index in the observation selection combo box.
         :return: (Observation) observation instance from the indicated index.
         """
-        oid = self.sensorIdFromIndex(idx)
+        oid = self.obsIdFromIndex(idx)
         if oid is not None:
             return self._obsManager.observationFromId(oid)
         return None
 
     def obsId(self):
         """
-        Gets current sensor ID. Returns None if no selection was made.
-        :return: (int) sensor ID.
+        Gets current observation's ID. Returns None if no selection was made.
+        :return: (int) observation's ID.
         """
         if self.obsComboBox.currentIndex() < 1:
             return None
@@ -193,22 +193,22 @@ class ObservationWidget(QWidget, FORM_CLASS):
         form.setInvalidationMessage(ir)
         return ir == ''
 
-    # @pyqtSlot(bool, name='on_updateSensorPushButton_clicked')
-    # def openEditForm(self):
-    #     """
-    #     Opens feature form for current selection in edition mode.
-    #     """
-    #     form = FeatureForm(self.currentSensor(), True, self.parent)
-    #     # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
-    #     form.okButtonClicked.connect(self.checkFormValidity)
-    #     if form.exec_() == Enums.Finished:
-    #         attr = self.parametersFromForm(form.read())
-    #         sensor = self._obsManager.sensorFromAttributes(attr)
-    #         if sensor.isValid():
-    #             self._obsManager.updateSensor(sensor)
-    #             form.blockSignals(True)
-    #             del form
-    #             self.sensorEdited.emit(sensor)
+    @pyqtSlot(bool, name='on_updateObservationPushButton_clicked')
+    def openEditForm(self):
+        """
+        Opens feature form for current selection in edition mode.
+        """
+        form = FeatureForm(self.currentObservation(), True, self.parent)
+        form.setWindowTitle(form.tr("Edit observation's attributes"))
+        form.okButtonClicked.connect(self.checkFormValidity)
+        if form.exec_() == Enums.Finished:
+            attr = self.parametersFromForm(form.read())
+            obs = self._obsManager.observationFromAttributes(attr)
+            if obs.isValid():
+                self._obsManager.updateObservation(obs)
+                form.blockSignals(True)
+                del form
+                self.observationEdited.emit(obs)
 
     @pyqtSlot(bool, name='on_addObservationPushButton_clicked')
     def openForm(self):

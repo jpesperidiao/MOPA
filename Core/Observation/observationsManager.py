@@ -143,10 +143,11 @@ class ObservationsManager():
         # TODO
         pass
 
-    def updateObservation(self, parameters):
+    def updateObservation(self, obs):
         """
         Updates the attribute values for a given observation into database.
-        :parameters: (dict) map of attributes of an observation.
+        :param obs: (Observation) observation to have its information updated
+                    into the database.
         """
         # TODO
         pass

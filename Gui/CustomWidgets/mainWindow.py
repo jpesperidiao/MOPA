@@ -135,23 +135,6 @@ class MainWindow(QMainWindow, FORMCLASS):
         else:
             self.obsWidget.refresh(ObservationsManager().allObservations().values())
 
-    # @pyqtSlot(bool, name="on_updateObservationPushButton_clicked")
-    # def updateObservation(self):
-    #     """
-    #     [TEST] Updates an observation in the database.
-    #     """
-    #     if self.obsComboBox.currentIndex() > 0:
-    #         obsId = int(self.obsComboBox.currentText().split(" ")[-1])
-    #         obs = ObservationsManager().allObservations()[obsId]
-    #         ObservationsManagerDialog().openForm(obs)
-
-    # @pyqtSlot(bool, name="on_addObservationPushButton_clicked")
-    # def addObservation(self):
-    #     """
-    #     [TEST] Adds an observation to the database.
-    #     """
-    #     ObservationsManagerDialog().openForm()
-
     def methodNameMap(self):
         """
         Maps the method index / code to its friendly name.
