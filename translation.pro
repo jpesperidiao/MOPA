@@ -19,6 +19,7 @@ SOURCES         =	Settings/__init__.py \
                     Core/Terrain/terrain.py \
                     Core/Terrain/__init__.py \
                     Core/ProcessingTools/shooterFinder.py \
+                    Core/ProcessingTools/geoprocessingTools.py \
                     Core/ProcessingTools/__init__.py \
                     Core/ProcessingTools/rasterLayer.py \
                     Core/Shooter/__init__.py \
@@ -30,11 +31,10 @@ SOURCES         =	Settings/__init__.py \
                     Gui/CustomWidgets/PlottingWidgets/__init__.py \
                     Gui/CustomWidgets/PlottingWidgets/mayaViWidget.py \
                     Gui/CustomWidgets/__init__.py \
-                    Gui/CustomWidgets/mainWindow.py \
-                    Gui/CustomWidgets/summaryDialog.py \
                     Gui/CustomWidgets/sensorWidget.py \
+                    Gui/CustomWidgets/mainWindow.py \
                     Gui/CustomWidgets/observationWidget.py \
-                    Gui/CustomWidgets/FeatureForms/observationsManagerDialog.py \
+                    Gui/CustomWidgets/summaryDialog.py \
                     Gui/CustomWidgets/FeatureForms/__init__.py \
                     Gui/CustomWidgets/FeatureForms/featureForm.py \
                     Gui/guiManager.py \

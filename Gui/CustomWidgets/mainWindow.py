@@ -34,7 +34,6 @@ from Core.Sensor.sensorsManager import SensorsManager
 from Core.Observation.observationsManager import ObservationsManager
 from Core.ProcessingTools.shooterFinder import ShooterFinder
 from Gui.CustomWidgets.summaryDialog import SummaryDialog
-from Gui.CustomWidgets.FeatureForms.observationsManagerDialog import ObservationsManagerDialog
 
 FORMCLASS, _ = uic.loadUiType(os.path.join(
                     os.path.dirname(__file__),

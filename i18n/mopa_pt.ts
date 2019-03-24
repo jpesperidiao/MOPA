@@ -214,52 +214,52 @@
         <translation type="obsolete">Observação {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="161"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="145"/>
         <source>Helmert Algorithm</source>
         <translation>Método de Helmert</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="162"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="146"/>
         <source>Analytical Algorithm</source>
         <translation>Método Analítico</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="163"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="147"/>
         <source>Combined Algorithm</source>
         <translation>Método Combinado</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="172"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="156"/>
         <source>Select an algorithm...</source>
         <translation>Selecione um método...</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="181"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="165"/>
         <source>Input DEM seems to be invalid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="184"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="168"/>
         <source>Sensor not selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="192"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="176"/>
         <source>Observation selected seems to be invalid: &apos;{0}&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="190"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="174"/>
         <source>Observed event not selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="195"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="179"/>
         <source>Processing algorithm not selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="224"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="208"/>
         <source>Invalid parameter.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -310,12 +310,12 @@
         <translation type="unfinished">Observação</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/observationWidget.py" line="126"/>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="128"/>
         <source>Vertical angle: {0:.2f}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/observationWidget.py" line="125"/>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="127"/>
         <source>Azimuth: {0:.2f}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -330,24 +330,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/observationWidget.py" line="65"/>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="67"/>
         <source>Select an observation...</source>
         <translation type="unfinished">Selecione uma observação...</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/observationWidget.py" line="127"/>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="129"/>
         <source>Observation date: {0}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/observationWidget.py" line="128"/>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="130"/>
         <source>Event information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/observationWidget.py" line="130"/>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="132"/>
         <source> from station ID = {0}</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="191"/>
+        <source>Observation ID {0} already exists into the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="220"/>
+        <source>Add a new observation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="232"/>
+        <source>Observation {0}</source>
+        <translation type="unfinished">Observação {0}</translation>
     </message>
 </context>
 <context>
@@ -530,6 +545,16 @@
         <source>Sensor ID {0} already exists into the database.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="220"/>
+        <source>Edit sensor ID = {0}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Gui/CustomWidgets/sensorWidget.py" line="237"/>
+        <source>Add a new sensor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SqliteDatabase</name>
@@ -618,6 +643,14 @@
         <location filename="../Core/Terrain/terrain.py" line="112"/>
         <source>Visualization of {0}</source>
         <translation>Visualização de {0}</translation>
+    </message>
+</context>
+<context>
+    <name>form</name>
+    <message>
+        <location filename="../Gui/CustomWidgets/observationWidget.py" line="203"/>
+        <source>Edit observation&apos;s attributes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
