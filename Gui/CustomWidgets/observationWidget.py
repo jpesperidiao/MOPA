@@ -5,9 +5,9 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-03-06
+        begin                : 2019-03-06
         git sha              : $Format:%H$
-        copyright            : (C) 2018 by João P. Esperidião
+        copyright            : (C) 2019 by João P. Esperidião
         email                : joao.p2709@gmail.com
  ***************************************************************************/
 
@@ -26,9 +26,11 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
+from Core.enums import Enums
 from Settings.settings import Settings
 from Core.Observation.observation import Observation
 from Core.Observation.observationsManager import ObservationsManager
+from Gui.CustomWidgets.FeatureForms.featureForm import FeatureForm
 
 FORM_CLASS, _ = uic.loadUiType(
         path.join(path.dirname(__file__), 'observationWidget.ui')
@@ -93,9 +95,9 @@ class ObservationWidget(QWidget, FORM_CLASS):
         :param idx: (int) item index in the observation selection combo box.
         :return: (Observation) observation instance from the indicated index.
         """
-        sid = self.sensorIdFromIndex(idx)
-        if sid is not None:
-            return self._obsManager.observationFromId(sid)
+        oid = self.sensorIdFromIndex(idx)
+        if oid is not None:
+            return self._obsManager.observationFromId(oid)
         return None
 
     def obsId(self):
@@ -147,46 +149,49 @@ class ObservationWidget(QWidget, FORM_CLASS):
         self.setObsInformation(self.currentObservation())
         self.selectionChanged.emit(idx)
 
-    # def parametersFromForm(self, attributes):
-    #     """
-    #     Sets the correct variable types from form info.
-    #     :param attributes: (dict) form's info.
-    #     :return: (dict) values reasigned to its correct variable type. 
-    #     """
-    #     try:
-    #         attributes['id'] = int(attributes['id'])
-    #     except:
-    #         pass
-    #     try:
-    #         attributes['epsg'] = int(attributes['epsg'])
-    #     except:
-    #         pass
-    #     try:
-    #         attributes['coordinates'] = tuple([
-    #                 float(n) for n in attributes['coordinates'][1:-1].split(', ')
-    #             ])
-    #     except:
-    #         pass
-    #     if attributes['status'].lower() in ("true", "false"):
-    #         attributes['status'] = attributes['status'].lower() == "true"
-    #     return attributes
+    def parametersFromForm(self, attributes):
+        """
+        Sets the correct variable types from form info.
+        :param attributes: (dict) form's info.
+        :return: (dict) values reasigned to its correct variable type. 
+        """
+        try:
+            attributes['id'] = int(attributes['id'])
+        except:
+            pass
+        try:
+            attributes['azimuth'] = float(attributes['azimuth'])
+        except:
+            pass
+        try:
+            attributes['zenith'] = float(attributes['zenith'])
+        except:
+            pass
+        try:
+            attributes['sensorId'] = int(attributes['sensorId'])
+        except:
+            pass
+        if not isinstance(attributes['date'], str):
+            try:
+                attributes['date'] = str(attributes['date'])
+            except:
+                pass
+        return attributes
 
-    # def checkFormValidity(self, form, checkIfExists=False):
-    #     """
-    #     Checks form validity.
-    #     :param form: (FeatureForm) form to have its contents checked.
-    #     :param checkIfExists: (bool) indicates whether entry existance should be checked.
-    #     :return: (bool) form validity status.
-    #     """
-    #     attr = self.parametersFromForm(form.read())
-    #     ir = self._obsManager.newSensor().invalidationReason(attr)
-    #     if ir == '' and attr['epsg'] == 0:
-    #         ir = self.tr("Invalid CRS.")
-    #     if checkIfExists and self._obsManager.idExists(attr['id']):
-    #         ir = self.tr("Sensor ID {0} already exists into the database.").\
-    #             format(attr['id'])
-    #     form.setInvalidationMessage(ir)
-    #     return ir == ''
+    def checkFormValidity(self, form, checkIfExists=False):
+        """
+        Checks form validity.
+        :param form: (FeatureForm) form to have its contents checked.
+        :param checkIfExists: (bool) indicates whether entry existance should be checked.
+        :return: (bool) form validity status.
+        """
+        attr = self.parametersFromForm(form.read())
+        ir = self._obsManager.newObservation().invalidationReason(attr)
+        if checkIfExists and self._obsManager.idExists(attr['id']):
+            ir = self.tr("Observation ID {0} already exists into the database.").\
+                format(attr['id'])
+        form.setInvalidationMessage(ir)
+        return ir == ''
 
     # @pyqtSlot(bool, name='on_updateSensorPushButton_clicked')
     # def openEditForm(self):
@@ -205,28 +210,24 @@ class ObservationWidget(QWidget, FORM_CLASS):
     #             del form
     #             self.sensorEdited.emit(sensor)
 
-    # @pyqtSlot(bool, name='on_addSensorPushButton_clicked')
-    # def openForm(self):
-    #     """
-    #     Opens attribute form to be filled in order to add a new sensor.
-    #     """
-    #     form = FeatureForm(self._obsManager.newSensor(), True, self.parent)
-    #     # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
-    #     form.okButtonClicked.connect(lambda f : self.checkFormValidity(f, True))
-    #     if form.exec_() == Enums.Finished:
-    #         attr = self.parametersFromForm(form.read())
-    #         sensor = self._obsManager.sensorFromAttributes(attr)
-    #         if sensor.isValid():
-    #             self._obsManager.addSensor(
-    #                 sensor['coordinates'],
-    #                 sensor['epsg'],
-    #                 sensor['name'],
-    #                 sensor['status']
-    #             )
-    #             form.blockSignals(True)
-    #             del form
-    #             name = "{0} (ID = {1})".format(
-    #                 sensor['name'] or self.tr("Station {0}").format(sensor['id']), sensor['id']
-    #             )
-    #             self.obsComboBox.addItem(name)
-    #             self.sensorAdded.emit(sensor)
+    @pyqtSlot(bool, name='on_addObservationPushButton_clicked')
+    def openForm(self):
+        """
+        Opens attribute form to be filled in order to add a new sensor.
+        """
+        form = FeatureForm(self._obsManager.newObservation(), True, self.parent)
+        form.setWindowTitle(self.tr("Add a new observation"))
+        form.okButtonClicked.connect(lambda f : self.checkFormValidity(f, True))
+        if form.exec_() == Enums.Finished:
+            attr = self.parametersFromForm(form.read())
+            obs = self._obsManager.observationFromAttributes(attr)
+            if obs.isValid():
+                self._obsManager.addObservation(
+                    azimuth=obs['azimuth'], zenith=obs['zenith'],\
+                    sensorId=obs['sensorId']
+                )
+                form.blockSignals(True)
+                del form
+                name = self.tr("Observation {0}").format(obs['id'])
+                self.obsComboBox.addItem(name)
+                self.observationAdded.emit(obs)

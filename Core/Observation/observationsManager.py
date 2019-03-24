@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-13
+        begin                : 2019-01-13
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -82,6 +82,32 @@ class ObservationsManager():
             if param['id'] == obsId:
                 return Observation(param)
         return self.newObservation()
+
+    def observationFromAttributes(self, parameters):
+        """
+        Gets an Observation instance based on a set of attributes.
+        :param parameters: (dict) attribute set.
+        :return: (Observation) an observation instance if attribute set is valid,
+                 or a blank instance.
+        """
+        o = Observation(parameters)
+        return o if o.isValid() else self.newObservation()
+
+    def observationExists(self, obs):
+        """
+        Checks if an observation exists into database.
+        :param obs: (Observation) observation instance.
+        :return: (bool) if sensor exists into the database.
+        """
+        return self.idExists(obs['id'])
+
+    def idExists(self, obsId):
+        """
+        Checks if an observation exists into database from its ID.
+        :param obsId: (int) observation ID to be checked.
+        :return: (bool) if the database has a observation entry with the given ID.
+        """
+        return obsId in self.allObservations()
 
     def addObservation(self, azimuth, zenith, sensorId):
         """

@@ -154,7 +154,8 @@ class MainWindow(QMainWindow, FORMCLASS):
 
     def methodNameMap(self):
         """
-        
+        Maps the method index / code to its friendly name.
+        :return: (dict) a map to all method names.
         """
         sf = ShooterFinder()
         return {
@@ -207,14 +208,13 @@ class MainWindow(QMainWindow, FORMCLASS):
         """
         Executes the selected algorithm with input data to find shooter.
         """
-        # interface parameters should be validated here instead of try/except
         if self.isValid():
             sensor = self.sensorWidget.currentSensor()
             obs = self.obsWidget.currentObservation()
             method = self.methodComboBox.currentIndex() - 1
+            sd = SummaryDialog()
             start = time()
             shooters = ShooterFinder().findShooter(method, sensor, obs, self.raster)
-            sd = SummaryDialog()
             sd.setSummary(self.methodComboBox.currentText(), self.raster, sensor, obs,\
                             shooters, time() - start)
             sd.exec_()

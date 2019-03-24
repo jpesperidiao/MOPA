@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-02-02
+        begin                : 2019-02-02
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com

@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-03-06
+        begin                : 2019-03-06
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -216,7 +216,7 @@ class SensorWidget(QWidget, FORM_CLASS):
         Opens feature form for current selection in edition mode.
         """
         form = FeatureForm(self.currentSensor(), True, self.parent)
-        # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
+        form.setWindowTitle(self.tr("Edit sensor ID = {0}".format(self.sensorId())))
         form.okButtonClicked.connect(self.checkFormValidity)
         if form.exec_() == Enums.Finished:
             attr = self.parametersFromForm(form.read())
@@ -233,7 +233,7 @@ class SensorWidget(QWidget, FORM_CLASS):
         Opens attribute form to be filled in order to add a new sensor.
         """
         form = FeatureForm(self._sensorsManager.newSensor(), True, self.parent)
-        # form.setTitle(form.tr("Observation Attributes Form - add new sensor"))
+        form.setWindowTitle(self.tr("Add a new sensor"))
         form.okButtonClicked.connect(lambda f : self.checkFormValidity(f, True))
         if form.exec_() == Enums.Finished:
             attr = self.parametersFromForm(form.read())
