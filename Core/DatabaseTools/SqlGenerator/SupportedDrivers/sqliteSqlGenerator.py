@@ -200,5 +200,5 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
                 .format(
                     table=table, name="" if name is None else name,
                     epsg=epsg, coord=coord, onDate=onDate, offDate=offDate,
-                    status=int(status), id=sensorId
+                    status=int(status and not offDate), id=sensorId
                 )

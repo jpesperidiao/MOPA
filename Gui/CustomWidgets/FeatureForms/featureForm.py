@@ -24,7 +24,7 @@
 from time import sleep
 from os import path
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox
 
 from Core.enums import Enums
@@ -166,3 +166,15 @@ class FeatureForm(QDialog, FORM_CLASS):
             QMessageBox.warning(self, self.tr("Invalid attribute!"), self.invalidationMessage())
         else:
             self.done(code)
+
+    def keyPressEvent(self, e):
+        """
+        Method called whenever a key is pressed.
+        :param: (KeyboardPressEvent)
+        """
+        codeList = {
+            Qt.Key_Return : Enums.Finished,
+            Qt.Key_Escape : Enums.Cancelled
+        }
+        if e.key() in codeList:
+            self.done(codeList[e.key()])

@@ -224,6 +224,14 @@ class SensorWidget(QWidget, FORM_CLASS):
             sensor = self._sensorsManager.sensorFromAttributes(attr)
             if sensor.isValid():
                 self._sensorsManager.updateSensor(sensor)
+                # once sensor was confirmed as updated, current name could've changed
+                self.sensorComboBox.setItemText(
+                    self.sensorComboBox.currentIndex(),
+                    "{0} (ID = {1})".format(
+                        sensor['name'] or self.tr("Station {0}").format(sensor['id']),
+                        sensor['id']
+                        )
+                )
                 form.blockSignals(True)
                 del form
                 self.sensorEdited.emit(sensor)
@@ -248,8 +256,8 @@ class SensorWidget(QWidget, FORM_CLASS):
                 )
                 form.blockSignals(True)
                 del form
-                name = "{0} (ID = {1})".format(
-                    sensor['name'] or self.tr("Station {0}").format(sensor['id']), sensor['id']
-                )
-                self.sensorComboBox.addItem(name)
+                # name = "{0} (ID = {1})".format(
+                #     sensor['name'] or self.tr("Station {0}").format(sensor['id']), sensor['id']
+                # )
+                # self.sensorComboBox.addItem(name)
                 self.sensorAdded.emit(sensor)
