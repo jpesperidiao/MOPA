@@ -189,8 +189,8 @@ class SensorWidget(QWidget, FORM_CLASS):
                 ])
         except:
             pass
-        if attributes['status'].lower().strip() in ("true", "false"):
-            attributes['status'] = attributes['status'].lower().strip() == "true"
+        attributes['status'] = attributes['status'].lower().strip() == "true" and \
+                                attributes['deactivation_date'] == ""
         return attributes
 
     def checkFormValidity(self, form, checkIfExists=False):
@@ -232,6 +232,8 @@ class SensorWidget(QWidget, FORM_CLASS):
                         sensor['id']
                         )
                 )
+                # and update its attributes to GUI
+                self.setSensorInformation(sensor)
                 form.blockSignals(True)
                 del form
                 self.sensorEdited.emit(sensor)
