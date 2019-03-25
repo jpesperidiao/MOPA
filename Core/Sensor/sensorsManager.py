@@ -188,8 +188,10 @@ class SensorsManager():
         Updates the attribute values for a given sensor into the database.
         :param sensor: (Sensor) sensor to be updated on the database.
         """
-        # TODO
-        pass
+        # if self.sensorExists(sensor):
+        self.settings.updateSensor(sensor)
+        # else:
+        #     raise Exception("Sensor does not exist into database.")
 
     def getObservationsFromSensor(self, sensorId):
         """

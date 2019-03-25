@@ -180,7 +180,9 @@ class AbstractDatabase(QObject):
         :param commit: (bool) commit addition to database.
         """
         if self.isConnected():
-            return self.query(self.gen.addObservation(azimuth, zenith, sensorId), commit)
+            return self.query(
+                        self.gen.addObservation(azimuth, zenith, sensorId), commit
+                    )
         return 
 
     def addSensor(self, coordinates, epsg, name=None, status=True, commit=True):
@@ -193,8 +195,29 @@ class AbstractDatabase(QObject):
         :param commit: (bool) commit addition to database.
         """
         if self.isConnected():
-            return self.query(self.gen.addSensor(coordinates, epsg, name, status), commit)
+            self.query(
+                self.gen.addSensor(coordinates, epsg, name, status), commit
+            )
         return 
+
+    def updateSensor(self, table, sensor, commit=True):
+        """
+        Updates sensors information. Sensor information should already exist into
+        the database.
+        :param table: (str) sensors' table name.
+        :param sensor: (Sensor) sensor object.
+        :param commit: (bool) commit addition to database.
+        """
+        if self.isConnected():
+            coord = ",".join(map(str, sensor['coordinates']))
+            self.query(
+                self.gen.updateSensor(
+                    table=table, epsg=sensor['epsg'], sensorId=sensor['id'],
+                    coord=coord, onDate=sensor['activation_date'],
+                    status=sensor['status'], name=sensor['name'],
+                    offDate=sensor['deactivation_date']
+                ), commit
+            )
 
     def createShootersTable(self, tablename, commit=True):
         """

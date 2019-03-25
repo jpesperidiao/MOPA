@@ -70,14 +70,14 @@ class Settings(object):
         """
         return os.path.dirname(__file__)
 
-    def observationsTableName(self, tablename):
+    def observationsTableName(self):
         """
         Gets default observation table name.
         :return: (str) table's name.
         """
         return 'observations'
 
-    def sensorsTableName(self, tablename):
+    def sensorsTableName(self):
         """
         Gets default sensors table name.
         :return: (str) table's name.
@@ -127,6 +127,14 @@ class Settings(object):
         :param status: (bool) sensor's activation status.
         """
         self.settingsDb.addSensor(coordinates, epsg, name, status)
+
+    def updateSensor(self, sensor):
+        """
+        Updates sensors information. Sensor information should already exist into
+        the database.
+        :param sensor: (Sensor) sensor object.
+        """
+        self.settingsDb.updateSensor(self.sensorsTableName(), sensor)
 
     def getSensor(self, sensorId):
         """

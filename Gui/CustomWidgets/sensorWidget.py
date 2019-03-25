@@ -189,8 +189,8 @@ class SensorWidget(QWidget, FORM_CLASS):
                 ])
         except:
             pass
-        if attributes['status'].lower() in ("true", "false"):
-            attributes['status'] = attributes['status'].lower() == "true"
+        if attributes['status'].lower().strip() in ("true", "false"):
+            attributes['status'] = attributes['status'].lower().strip() == "true"
         return attributes
 
     def checkFormValidity(self, form, checkIfExists=False):
@@ -217,6 +217,7 @@ class SensorWidget(QWidget, FORM_CLASS):
         """
         form = FeatureForm(self.currentSensor(), True, self.parent)
         form.setWindowTitle(self.tr("Edit sensor ID = {0}".format(self.sensorId())))
+        form.fieldReadOnly('id', True) # since it is an EDITION, id should be kept the same.
         form.okButtonClicked.connect(self.checkFormValidity)
         if form.exec_() == Enums.Finished:
             attr = self.parametersFromForm(form.read())

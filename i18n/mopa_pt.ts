@@ -124,72 +124,72 @@
         <translation type="obsolete">Observação</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="68"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="67"/>
         <source>Select a DEM raster</source>
         <translation>Selecione o raster de MDE</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="68"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="67"/>
         <source>Raster (*.png *.tif *.tiff)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="75"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="74"/>
         <source>DEM information: {0}</source>
         <translation>Informação de MDE: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="76"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="75"/>
         <source>File path: {0}</source>
         <translation>Diretório: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="77"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="76"/>
         <source>CRS name: {0}</source>
         <translation>SRC: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="77"/>
         <source>Max. altitude: {0:.2f} m</source>
         <translation>Altitude máx.: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="79"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="78"/>
         <source>Min. altitude: {0:.2f} m</source>
         <translation>Altitude min.: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="80"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="79"/>
         <source>Raster height: {0}</source>
         <translation>Altura do raster: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="81"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="80"/>
         <source>Raster width: {0}</source>
         <translation>Largura do raster: {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="82"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="81"/>
         <source>Spatial resolution: {0:.2f} m (detected)</source>
         <translation>Resolução espacial: {0:.2f} m (detectada)</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="83"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="82"/>
         <source>Spatial resolution: {0:.2f} m</source>
         <translation>Resolução espacial: {0:.2f} m</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="85"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="84"/>
         <source>meters</source>
         <translation>metros</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="85"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="84"/>
         <source>degrees</source>
         <translation>graus</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="86"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="85"/>
         <source>DEM units: {0}</source>
         <translation>Unidades do MDE: {0}</translation>
     </message>
@@ -214,52 +214,52 @@
         <translation type="obsolete">Observação {0}</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="145"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="144"/>
         <source>Helmert Algorithm</source>
         <translation>Método de Helmert</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="146"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="145"/>
         <source>Analytical Algorithm</source>
         <translation>Método Analítico</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="147"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="146"/>
         <source>Combined Algorithm</source>
         <translation>Método Combinado</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="156"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="155"/>
         <source>Select an algorithm...</source>
         <translation>Selecione um método...</translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="165"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="164"/>
         <source>Input DEM seems to be invalid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="168"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="167"/>
         <source>Sensor not selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="176"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="175"/>
         <source>Observation selected seems to be invalid: &apos;{0}&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="174"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="173"/>
         <source>Observed event not selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="179"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="178"/>
         <source>Processing algorithm not selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Gui/CustomWidgets/mainWindow.py" line="208"/>
+        <location filename="../Gui/CustomWidgets/mainWindow.py" line="207"/>
         <source>Invalid parameter.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -48,7 +48,6 @@ class MainWindow(QMainWindow, FORMCLASS):
         icon = QIcon(
             os.path.join(os.path.dirname(__file__), '..', '..', 'Icons', 'icon.svg')
         )
-        # self.setIcon(icon)
         self.setWindowIcon(icon)
         self.raster = RasterLayer()
         self.terrain = Terrain()

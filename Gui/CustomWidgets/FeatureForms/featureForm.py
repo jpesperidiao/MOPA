@@ -124,6 +124,18 @@ class FeatureForm(QDialog, FORM_CLASS):
             wMap['lineEdit'].setText(self.feature[attr])
             wMap["lineEdit"].setReadOnly(not self.isEditable)
 
+    def fieldReadOnly(self, field, readOnly):
+        """
+        Sets read only status to a field entry on the form, if it exists.
+        :param field: (str) field name.
+        :param readOnly: (bool) whether attribute should be can (not) be edited.
+        :return: (bool) read only status. If field doesn't exist, False will be returned.
+        """
+        if field in self.widgets:
+            self.widgets[field]['lineEdit'].setReadOnly(readOnly)
+            return readOnly
+        return False
+
     def updateAttribute(self, attribute, value):
         """
         Updates attribute value to be exhibited on the form.

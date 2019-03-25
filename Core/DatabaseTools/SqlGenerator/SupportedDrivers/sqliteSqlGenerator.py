@@ -174,3 +174,31 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         :para tablename: (str) shooters' table name (default from settings).
         """
         return ""
+
+    def updateSensor(self, table, epsg, sensorId, coord, onDate, status, name=None, offDate=None):
+        """
+        Updates all attributes from a given sensor.
+        :param table: (str) sensors' table name.
+        :param epsg: (int) CRS's auth ID.
+        :param sensorId: (int) ID for sensor to be updated.
+        :param coord: (str) coordinates string (e.g. "yCoord, xCoord, zCoord").
+        :param onDate: (str) activation date (e.g. "aaaa-MM-dd").
+        :param status: (bool) sensor activation status.
+        :param name: (str) sensor's friendly name, an alias to it.
+        :param offDate: (str) deactivation date (e.g. "aaaa-MM-dd").
+        """
+        return  """
+                UPDATE {table} SET 
+                        name = '{name}',
+                        coordinates = '{coord}',
+                        epsg = {epsg},
+                        activation_date = DATE('{onDate}'),
+                        deactivation_date = DATE('{offDate}'),
+                        status = {status}
+                    WHERE id = {id};
+                """\
+                .format(
+                    table=table, name="" if name is None else name,
+                    epsg=epsg, coord=coord, onDate=onDate, offDate=offDate,
+                    status=int(status), id=sensorId
+                )
