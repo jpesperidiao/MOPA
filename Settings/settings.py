@@ -128,9 +128,17 @@ class Settings(object):
         """
         self.settingsDb.addSensor(coordinates, epsg, name, status)
 
+    def updateObservation(self, obs):
+        """
+        Updates observation's information. Sensor information should already exist into
+        the database.
+        :param obs: (Observation) observation object to have its info updated.
+        """
+        self.settingsDb.updateObservation(self.observationsTableName(), obs)
+
     def updateSensor(self, sensor):
         """
-        Updates sensors information. Sensor information should already exist into
+        Updates sensor's information. Sensor information should already exist into
         the database.
         :param sensor: (Sensor) sensor object.
         """

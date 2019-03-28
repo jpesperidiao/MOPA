@@ -149,5 +149,4 @@ class ObservationsManager():
         :param obs: (Observation) observation to have its information updated
                     into the database.
         """
-        # TODO
-        pass
+        self.settings.updateObservation(obs)

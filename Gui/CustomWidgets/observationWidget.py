@@ -200,12 +200,19 @@ class ObservationWidget(QWidget, FORM_CLASS):
         """
         form = FeatureForm(self.currentObservation(), True, self.parent)
         form.setWindowTitle(form.tr("Edit observation's attributes"))
+        form.fieldReadOnly('id', True) # since it is an EDITION, id should be kept the same.
         form.okButtonClicked.connect(self.checkFormValidity)
         if form.exec_() == Enums.Finished:
             attr = self.parametersFromForm(form.read())
             obs = self._obsManager.observationFromAttributes(attr)
             if obs.isValid():
                 self._obsManager.updateObservation(obs)
+                self.obsComboBox.setItemText(
+                    self.obsComboBox.currentIndex(),
+                    self.tr("Observation {0}").format(obs['id'])
+                )
+                # and update its attributes to GUI
+                self.setObsInformation(obs)
                 form.blockSignals(True)
                 del form
                 self.observationEdited.emit(obs)

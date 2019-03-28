@@ -200,6 +200,23 @@ class AbstractDatabase(QObject):
             )
         return 
 
+    def updateObservation(self, table, obs, commit=True):
+        """
+        Updates observation's information. Observation information should already
+        exist into the database.
+        :param table: (str) observations' table name.
+        :param sensor: (Observation) observation object.
+        :param commit: (bool) commit addition to database.
+        """
+        if self.isConnected():
+            self.query(
+                self.gen.updateObservation(
+                    table=table, obsId=obs['id'], azimuth=obs['azimuth'],
+                    zenith=obs['zenith'], sensorId=obs['sensorId'],
+                    date=obs['date']
+                ), commit
+            )
+
     def updateSensor(self, table, sensor, commit=True):
         """
         Updates sensors information. Sensor information should already exist into

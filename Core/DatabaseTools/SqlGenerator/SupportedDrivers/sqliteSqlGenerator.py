@@ -130,9 +130,9 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
     def addObservation(self, azimuth, zenith, sensorId):
         """
         Adds a observation to the database.
-        :param azimuth: observation's azimuth angle.
-        :param zenith: observation's zenith angle.
-        :param sensorId: (str) station's ID.
+        :param azimuth: (float) observation's azimuth angle.
+        :param zenith: (float) observation's zenith angle.
+        :param sensorId: (int) station's ID.
         """
         return """\
         INSERT INTO observations (azimuth, zenith, sensor, date)
@@ -174,6 +174,28 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         :para tablename: (str) shooters' table name (default from settings).
         """
         return ""
+
+    def updateObservation(self, obsId, table, azimuth, zenith, sensorId, date):
+        """
+        Updates all attributes from a given observation.
+        :param obsId: (int) observation's ID to have its information updated.
+        :param azimuth: observation's azimuth angle.
+        :param zenith: observation's zenith angle.
+        :param sensorId: (int) station's ID from which event was observed.
+        :param date: (str) event observation's date.
+        """
+        return """
+                UPDATE {table} SET 
+                        azimuth = {azimuth},
+                        zenith = {zenith},
+                        sensor = {sensorId},
+                        date = DATE('{date}')
+                    WHERE id = {obsId};
+                """\
+                .format(
+                    table=table, obsId=obsId, azimuth=azimuth, zenith=zenith,
+                    date=date, sensorId=sensorId
+                )
 
     def updateSensor(self, table, epsg, sensorId, coord, onDate, status, name=None, offDate=None):
         """
