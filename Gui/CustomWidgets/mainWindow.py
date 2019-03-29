@@ -24,8 +24,9 @@
 import os
 from time import time
 from PyQt5 import uic
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QFileDialog, QMainWindow
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QMessageBox
 
 from Core.ProcessingTools.rasterLayer import RasterLayer
 from Core.Terrain.terrain import Terrain
@@ -44,11 +45,17 @@ class MainWindow(QMainWindow, FORMCLASS):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
+        icon = QIcon(
+            os.path.join(os.path.dirname(__file__), '..', '..', 'Icons', 'icon.svg')
+        )
+        self.setWindowIcon(icon)
         self.raster = RasterLayer()
         self.terrain = Terrain()
         self.visualizePushButton.setEnabled(False)
-        self.sensors = dict()
         self.setMethods()
+        self.setupObservations()
+        self.sensorWidget.selectionChanged.connect(self.setupObservations)
+        self.setupSensors()
 
     @pyqtSlot(bool, name='on_demPushButton_clicked')
     def setDem(self):
@@ -61,7 +68,6 @@ class MainWindow(QMainWindow, FORMCLASS):
         self.visualizePushButton.setEnabled(self.raster is not None)
         if dem != "":
             self.raster.setRaster(dem)
-            self.sensors = self.getAllSensorsFromRaster(self.raster)
             self.setupSensors()
             self.visualizePushButton.setEnabled(self.raster.isValid())
             self.groupBox.setTitle(self.tr("DEM information: {0}").format(self.raster.name()))
@@ -71,7 +77,7 @@ class MainWindow(QMainWindow, FORMCLASS):
             self.minLabel.setText(self.tr("Min. altitude: {0:.2f} m").format(self.raster.min()))
             self.heightLabel.setText(self.tr("Raster height: {0}").format(self.raster.height()))
             self.widthLabel.setText(self.tr("Raster width: {0}").format(self.raster.width()))
-            reso =  self.tr("Spatial resolution: {0:.2f} m (detected)") if not self.raster.isGeographic()\
+            reso =  self.tr("Spatial resolution: {0:.2f} m (detected)") if self.raster.isGeographic()\
                  else self.tr("Spatial resolution: {0:.2f} m")
             self.resLabel.setText(reso.format(self.raster.spatialResolution()))
             units = self.tr("meters") if not self.raster.isGeographic() else self.tr("degrees")
@@ -87,39 +93,50 @@ class MainWindow(QMainWindow, FORMCLASS):
 
     def getAllSensorsFromRaster(self, dem):
         """
-        test.
+        Retrieves all sensors inside of a DEM.
+        :param dem: (RasterLayer) DEM to be checked for sensors.
+        :return: (list-of-Sensor)
         """
-        return SensorsManager().getSensorsInsideRaster(dem)
+        return list(SensorsManager().getSensorsInsideRaster(dem).values())
 
     def setupSensors(self):
         """
-        test.
+        Sets sensors to GUI.
         """
-        self.sensorComboBox.clear()
-        sensors = [
-                (s['name'] if s['name'] else self.tr("Station {0}").format(sid)) + " (ID = {0})".format(sid)\
-                for sid, s in self.sensors.items()
-            ]
-        sensors.insert(0, self.tr('Select a sensor...'))
-        self.sensorComboBox.addItems(sensors)
+        if self.raster.isValid():
+            self.sensorWidget.refresh(self.getAllSensorsFromRaster(self.raster))
+        else:
+            self.sensorWidget.refresh(SensorsManager().allSensors().values())
 
-    @pyqtSlot(int, name='on_sensorComboBox_currentIndexChanged')
-    def setupObservations(self, idx):
+    def getAllObsFromSensor(self, sensor=None):
         """
-        test.
+        Retrieves all observations made from a sensor.
+        :param dem: (RasterLayer) DEM to be checked for sensors.
+        :return: (list-of-Sensor)
         """
-        self.obsComboBox.clear()
-        self.obsComboBox.addItems([self.tr('Select an observation...')])
-        if idx > 0:
-            obs = set()
-            sid = int(self.sensorComboBox.currentText().split("ID = ")[-1].split(")")[0])
-            for o in ObservationsManager().getObservationsFromSensor(sid):
-                obs.add(o)
-            self.obsComboBox.addItems([self.tr("Observation {0}").format(o) for o in obs])
+        sensor = sensor or (self.sensorWidget.currentSensor() or \
+                 SensorsManager().newSensor())
+        if self.sensorWidget.currentSensor().isValid():
+            return ObservationsManager().getObservationsFromSensor(
+                self.sensorWidget.currentSensor()['id']
+            )
+        else:
+            return ObservationsManager().allObservations()
+
+    def setupObservations(self):
+        """
+        Sets observations to GUI.
+        """
+        s = self.sensorWidget.currentSensor()
+        if s is not None and s.isValid():
+            self.obsWidget.refresh(self.getAllObsFromSensor().values())
+        else:
+            self.obsWidget.refresh(ObservationsManager().allObservations().values())
 
     def methodNameMap(self):
         """
-        
+        Maps the method index / code to its friendly name.
+        :return: (dict) a map to all method names.
         """
         sf = ShooterFinder()
         return {
@@ -137,23 +154,51 @@ class MainWindow(QMainWindow, FORMCLASS):
         algs.insert(0, self.tr("Select an algorithm..."))
         self.methodComboBox.addItems(algs)
 
+    def validate(self):
+        """
+        Validates GUI components to check whether the alg can be run.
+        :return: (str) invalidation reason
+        """
+        if not self.raster.isValid():
+            return self.tr("Input DEM seems to be invalid.")
+        s = self.sensorWidget.currentSensor()
+        if s is None:
+            return self.tr("Sensor not selected.")
+        if not s.isValid():
+            return self.tr("Observation selected seems to be invalid: '{0}'")\
+                    .format(s.invalidationReason())
+        o = self.obsWidget.currentObservation()
+        if o is None:
+            return self.tr("Observed event not selected.")
+        if not o.isValid():
+            return self.tr("Observation selected seems to be invalid: '{0}'")\
+                    .format(o.invalidationReason())
+        if self.methodComboBox.currentIndex() < 1:
+            return self.tr("Processing algorithm not selected.")
+        return ""
+
+    def isValid(self):
+        """
+        Checks if current GUI components have valid inputs.
+        :return: (bool) validity status.
+        """
+        return self.validate() == ""
+
     @pyqtSlot(bool, name='on_findPushButton_clicked')
     def findShooter(self):
         """
-        
+        Executes the selected algorithm with input data to find shooter.
         """
-        # interface parameters should be validated here instead of try/except
-        try:
-            idx = self.methodComboBox.currentIndex()
-            if idx > 0 and self.raster is not None and self.raster.isValid():
-                obsId = int(self.obsComboBox.currentText().split(" ")[-1])
-                obs = ObservationsManager().allObservations()[obsId]
-                sid = int(self.sensorComboBox.currentText().split("ID = ")[-1].split(")")[0])
-                sensor = SensorsManager().getSensorFromId(sid)
-                now = time()
-                shooters = ShooterFinder().findShooter(idx - 1, sensor, obs, self.raster)
-                sd = SummaryDialog()
-                sd.setSummary(self.methodComboBox.currentText(), self.raster, sensor, obs, shooters, time() - now)
-                sd.exec_()
-        except:
-            pass
+        if self.isValid():
+            sensor = self.sensorWidget.currentSensor()
+            obs = self.obsWidget.currentObservation()
+            method = self.methodComboBox.currentIndex() - 1
+            sd = SummaryDialog()
+            start = time()
+            shooters = ShooterFinder().findShooter(method, sensor, obs, self.raster)
+            sd.setSummary(self.methodComboBox.currentText(), self.raster, sensor, obs,\
+                            shooters, time() - start)
+            sd.exec_()
+        else:
+            mb = QMessageBox(self)
+            mb.warning(self, self.tr("Invalid parameter."), self.validate())

@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-15
+        begin                : 2019-01-15
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -180,7 +180,9 @@ class AbstractDatabase(QObject):
         :param commit: (bool) commit addition to database.
         """
         if self.isConnected():
-            return self.query(self.gen.addObservation(azimuth, zenith, sensorId), commit)
+            return self.query(
+                        self.gen.addObservation(azimuth, zenith, sensorId), commit
+                    )
         return 
 
     def addSensor(self, coordinates, epsg, name=None, status=True, commit=True):
@@ -193,8 +195,46 @@ class AbstractDatabase(QObject):
         :param commit: (bool) commit addition to database.
         """
         if self.isConnected():
-            return self.query(self.gen.addSensor(coordinates, epsg, name, status), commit)
+            self.query(
+                self.gen.addSensor(coordinates, epsg, name, status), commit
+            )
         return 
+
+    def updateObservation(self, table, obs, commit=True):
+        """
+        Updates observation's information. Observation information should already
+        exist into the database.
+        :param table: (str) observations' table name.
+        :param sensor: (Observation) observation object.
+        :param commit: (bool) commit addition to database.
+        """
+        if self.isConnected():
+            self.query(
+                self.gen.updateObservation(
+                    table=table, obsId=obs['id'], azimuth=obs['azimuth'],
+                    zenith=obs['zenith'], sensorId=obs['sensorId'],
+                    date=obs['date']
+                ), commit
+            )
+
+    def updateSensor(self, table, sensor, commit=True):
+        """
+        Updates sensors information. Sensor information should already exist into
+        the database.
+        :param table: (str) sensors' table name.
+        :param sensor: (Sensor) sensor object.
+        :param commit: (bool) commit addition to database.
+        """
+        if self.isConnected():
+            coord = ",".join(map(str, sensor['coordinates']))
+            self.query(
+                self.gen.updateSensor(
+                    table=table, epsg=sensor['epsg'], sensorId=sensor['id'],
+                    coord=coord, onDate=sensor['activation_date'],
+                    status=sensor['status'], name=sensor['name'],
+                    offDate=sensor['deactivation_date']
+                ), commit
+            )
 
     def createShootersTable(self, tablename, commit=True):
         """

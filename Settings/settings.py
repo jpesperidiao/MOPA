@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-15
+        begin                : 2019-01-15
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -70,14 +70,14 @@ class Settings(object):
         """
         return os.path.dirname(__file__)
 
-    def observationsTableName(self, tablename):
+    def observationsTableName(self):
         """
         Gets default observation table name.
         :return: (str) table's name.
         """
         return 'observations'
 
-    def sensorsTableName(self, tablename):
+    def sensorsTableName(self):
         """
         Gets default sensors table name.
         :return: (str) table's name.
@@ -127,6 +127,22 @@ class Settings(object):
         :param status: (bool) sensor's activation status.
         """
         self.settingsDb.addSensor(coordinates, epsg, name, status)
+
+    def updateObservation(self, obs):
+        """
+        Updates observation's information. Sensor information should already exist into
+        the database.
+        :param obs: (Observation) observation object to have its info updated.
+        """
+        self.settingsDb.updateObservation(self.observationsTableName(), obs)
+
+    def updateSensor(self, sensor):
+        """
+        Updates sensor's information. Sensor information should already exist into
+        the database.
+        :param sensor: (Sensor) sensor object.
+        """
+        self.settingsDb.updateSensor(self.sensorsTableName(), sensor)
 
     def getSensor(self, sensorId):
         """

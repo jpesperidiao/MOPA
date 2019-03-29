@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-15
+        begin                : 2019-01-15
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -130,9 +130,9 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
     def addObservation(self, azimuth, zenith, sensorId):
         """
         Adds a observation to the database.
-        :param azimuth: observation's azimuth angle.
-        :param zenith: observation's zenith angle.
-        :param sensorId: (str) station's ID.
+        :param azimuth: (float) observation's azimuth angle.
+        :param zenith: (float) observation's zenith angle.
+        :param sensorId: (int) station's ID.
         """
         return """\
         INSERT INTO observations (azimuth, zenith, sensor, date)
@@ -174,3 +174,53 @@ class SqliteSqlGenerator(AbstractSqlGenerator):
         :para tablename: (str) shooters' table name (default from settings).
         """
         return ""
+
+    def updateObservation(self, obsId, table, azimuth, zenith, sensorId, date):
+        """
+        Updates all attributes from a given observation.
+        :param obsId: (int) observation's ID to have its information updated.
+        :param azimuth: observation's azimuth angle.
+        :param zenith: observation's zenith angle.
+        :param sensorId: (int) station's ID from which event was observed.
+        :param date: (str) event observation's date.
+        """
+        return """
+                UPDATE {table} SET 
+                        azimuth = {azimuth},
+                        zenith = {zenith},
+                        sensor = {sensorId},
+                        date = DATE('{date}')
+                    WHERE id = {obsId};
+                """\
+                .format(
+                    table=table, obsId=obsId, azimuth=azimuth, zenith=zenith,
+                    date=date, sensorId=sensorId
+                )
+
+    def updateSensor(self, table, epsg, sensorId, coord, onDate, status, name=None, offDate=None):
+        """
+        Updates all attributes from a given sensor.
+        :param table: (str) sensors' table name.
+        :param epsg: (int) CRS's auth ID.
+        :param sensorId: (int) ID for sensor to be updated.
+        :param coord: (str) coordinates string (e.g. "yCoord, xCoord, zCoord").
+        :param onDate: (str) activation date (e.g. "aaaa-MM-dd").
+        :param status: (bool) sensor activation status.
+        :param name: (str) sensor's friendly name, an alias to it.
+        :param offDate: (str) deactivation date (e.g. "aaaa-MM-dd").
+        """
+        return  """
+                UPDATE {table} SET 
+                        name = '{name}',
+                        coordinates = '{coord}',
+                        epsg = {epsg},
+                        activation_date = DATE('{onDate}'),
+                        deactivation_date = DATE('{offDate}'),
+                        status = {status}
+                    WHERE id = {id};
+                """\
+                .format(
+                    table=table, name="" if name is None else name,
+                    epsg=epsg, coord=coord, onDate=onDate, offDate=offDate,
+                    status=int(status and not offDate), id=sensorId
+                )

@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-15
+        begin                : 2019-01-15
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -44,7 +44,7 @@ class Observation(QObject):
             self.parameters = {
                 'id' : None,
                 'azimuth' : 0.,
-                'zenith' : 0,
+                'zenith' : 0.,
                 'sensorId' : None,
                 'date' : ''
             }
@@ -62,6 +62,13 @@ class Observation(QObject):
         When print is called, parameters will be exposed.
         """
         return str(self.parameters)
+
+    def attributes(self):
+        """
+        Gets all attributes available in a observation object.
+        :return: (tuple-of-str) an iterator for all attributes names.
+        """
+        return tuple(self.parameters.keys())
 
     def invalidationReason(self, parameters):
         """
@@ -97,3 +104,10 @@ class Observation(QObject):
         :return: (bool) validity status.
         """
         return self.invalidationReason(parameters) == ""
+
+    def isValid(self):
+        """
+        Validates current instance's parameters.
+        :return: (bool) validity status.
+        """
+        return self.validateParameters(self.parameters)

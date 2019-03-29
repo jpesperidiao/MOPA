@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-15
+        begin                : 2019-01-15
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -35,8 +35,8 @@ class Sensor(QObject):
             self.parameters = {
                 'id' : None,
                 'name' : '',
-                'coordinates' : (0., 0.),
-                'epsg' : 0,
+                'coordinates' : (0., 0., 0.),
+                'epsg' : 4326,
                 'activation_date' : '',
                 'deactivation_date' : '',
                 'status' : False
@@ -56,6 +56,13 @@ class Sensor(QObject):
         """
         return str(self.parameters)
 
+    def attributes(self):
+        """
+        Gets all attributes available in a sensor object.
+        :return: (tuple-of-str) an iterator for all attributes names.
+        """
+        return tuple(self.parameters.keys())
+
     def invalidationReason(self, parameters):
         """
         Gets sensor's parameters map invalidation reason, if any.
@@ -72,6 +79,8 @@ class Sensor(QObject):
         if 'coordinates' not in parameters or type(parameters['coordinates']) not in (list, tuple)\
             or not sum([type(coordinate) in (int, float) for coordinate in parameters['coordinates']]):
             return self.tr("Invalid coordinates.")
+        if len(parameters['coordinates']) < 3:
+            return self.tr("Invalid set of coordinates (it must be planimetric AND height.")
         if 'epsg' not in parameters or not isinstance(parameters['epsg'], int):
             return self.tr("Invalid CRS (EPSG code is not valid).")
         if 'activation_date' not in parameters or \

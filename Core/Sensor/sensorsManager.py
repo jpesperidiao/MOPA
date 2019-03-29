@@ -5,7 +5,7 @@
                                  An independet project
  Método de Obtenção da Posição de Atirador
                               -------------------
-        begin                : 2018-01-13
+        begin                : 2019-01-13
         git sha              : $Format:%H$
         copyright            : (C) 2018 by João P. Esperidião
         email                : joao.p2709@gmail.com
@@ -24,6 +24,7 @@
 from Settings.settings import Settings
 from .sensor import Sensor
 from Core.Observation.observationsManager import ObservationsManager
+from Core.ProcessingTools.geoprocessingTools import GeoprocessingTools
 
 class SensorsManager():
     """
@@ -59,7 +60,32 @@ class SensorsManager():
             param['epsg'] = int(param['epsg'])
         return Sensor(param)
 
-    def getNewSensor(self):
+    def sensorExists(self, sensor):
+        """
+        Checks if a sensor exists into database.
+        :param sensor: (Sensor) sensor instance.
+        :return: (bool) if sensor exists into the database.
+        """
+        return self.idExists(sensor['id'])
+
+    def idExists(self, sensorId):
+        """
+        Checks if a sensor exists into database from its ID.
+        :param sensorId: (int) sensor ID to be checked.
+        :return: (bool) if the database has a sensor entry with the given ID.
+        """
+        return sensorId in self.allSensors()
+
+    def sensorFromAttributes(self, parameters):
+        """
+        Gets a Sensor instance based on a set of attributes.
+        :param paremteres: (dict) attribute set.
+        :return: (Sensor) a sensor instance if attribute set is valid, or a blank instance.
+        """
+        s = Sensor(parameters)
+        return s if s.isValid() else self.newSensor()
+
+    def newSensor(self):
         """
         Gets a fresh and empty insance of a sensor.
         :return: (Sensor) new sensor.
@@ -139,9 +165,12 @@ class SensorsManager():
             param['status'] = bool(param['status'])
             param['id'] = int(param['id'])
             param['epsg'] = int(param['epsg'])
-            if param ['epsg'] != epsg:
-                # for now, just ignore, later reprojection should be applied
-                continue
+            if param['epsg']!= 0 and param['epsg'] != epsg:
+                reprojectedCoord = GeoprocessingTools.reprojectCoordinates(
+                    param['coordinates'], param['epsg'], epsg
+                )
+                if raster.hasPoint(reprojectedCoord):
+                    sensors[param['id']] = Sensor(param)
             elif raster.hasPoint(param['coordinates']):
                 sensors[param['id']] = Sensor(param)
         return sensors
@@ -153,6 +182,16 @@ class SensorsManager():
         """
         # TODO
         pass
+
+    def updateSensor(self, sensor):
+        """
+        Updates the attribute values for a given sensor into the database.
+        :param sensor: (Sensor) sensor to be updated on the database.
+        """
+        # if self.sensorExists(sensor):
+        self.settings.updateSensor(sensor)
+        # else:
+        #     raise Exception("Sensor does not exist into database.")
 
     def getObservationsFromSensor(self, sensorId):
         """

@@ -6,7 +6,7 @@
                      An independet project
  Método de Obtenção da Posição de Atirador
                   -------------------
-     begin                : 2018-01-15
+     begin                : 2019-01-15
      git sha              : $Format:%H$
      copyright            : (C) 2018 by João P. Esperidião
      email                : joao.p2709@gmail.com
@@ -29,6 +29,13 @@ from PyQt5.QtCore import QSettings, qVersion, QCoreApplication, QTranslator
 
 from Settings.settings import Settings
 from Gui.CustomWidgets.mainWindow import MainWindow
+
+# attach remote debugger only if available
+try:
+    import ptvsd
+    ptvsd.enable_attach(address=('localhost', 9875))
+except:
+    pass
 
 # provide internationalization
 locale_ = locale.getdefaultlocale()[0][0:2]
