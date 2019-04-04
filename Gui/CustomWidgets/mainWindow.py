@@ -114,12 +114,10 @@ class MainWindow(QMainWindow, FORMCLASS):
         :param dem: (RasterLayer) DEM to be checked for sensors.
         :return: (list-of-Sensor)
         """
-        sensor = sensor or (self.sensorWidget.currentSensor() or \
+        sensor = sensor or (self.currentSensor() or \
                  SensorsManager().newSensor())
-        if self.sensorWidget.currentSensor().isValid():
-            return ObservationsManager().getObservationsFromSensor(
-                self.sensorWidget.currentSensor()['id']
-            )
+        if sensor.isValid():
+            return ObservationsManager().getObservationsFromSensor(sensor['id'])
         else:
             return ObservationsManager().allObservations()
 
@@ -127,11 +125,27 @@ class MainWindow(QMainWindow, FORMCLASS):
         """
         Sets observations to GUI.
         """
-        s = self.sensorWidget.currentSensor()
-        if s is not None and s.isValid():
-            self.obsWidget.refresh(self.getAllObsFromSensor().values())
-        else:
-            self.obsWidget.refresh(ObservationsManager().allObservations().values())
+        s = self.currentSensor()
+        obsList = self.getAllObsFromSensor().values() if s is not None and s.isValid() \
+                    else ObservationsManager().allObservations().values()
+        obs = self.obsWidget.currentText()
+        self.obsWidget.refresh(obsList)
+        # try to keep the same selection
+        self.obsWidget.setCurrentObservation(obs)
+
+    def currentSensor(self):
+        """
+        Gets current sensor from sensor widget
+        :return: (Sensor) selected sensor on sensor widget.
+        """
+        return self.sensorWidget.currentSensor()
+
+    def currentObservation(self):
+        """
+        Gets current observation from observation widget
+        :return: (Observation) selected observation on observation widget.
+        """
+        return self.observationWidget.currentObservation()
 
     def methodNameMap(self):
         """
@@ -161,13 +175,13 @@ class MainWindow(QMainWindow, FORMCLASS):
         """
         if not self.raster.isValid():
             return self.tr("Input DEM seems to be invalid.")
-        s = self.sensorWidget.currentSensor()
+        s = self.currentSensor()
         if s is None:
             return self.tr("Sensor not selected.")
         if not s.isValid():
             return self.tr("Observation selected seems to be invalid: '{0}'")\
                     .format(s.invalidationReason())
-        o = self.obsWidget.currentObservation()
+        o = self.currentObservation()
         if o is None:
             return self.tr("Observed event not selected.")
         if not o.isValid():
@@ -190,8 +204,8 @@ class MainWindow(QMainWindow, FORMCLASS):
         Executes the selected algorithm with input data to find shooter.
         """
         if self.isValid():
-            sensor = self.sensorWidget.currentSensor()
-            obs = self.obsWidget.currentObservation()
+            sensor = self.currentSensor()
+            obs = self.currentObservation()
             method = self.methodComboBox.currentIndex() - 1
             sd = SummaryDialog()
             start = time()

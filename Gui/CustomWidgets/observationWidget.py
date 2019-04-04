@@ -69,6 +69,22 @@ class ObservationWidget(QWidget, FORM_CLASS):
             "Observation {0}".format(o['id']) for o in obsList
         ])
 
+    def setCurrentObservation(self, obs):
+        """
+        Sets current observation from its text as current selection on combo box.
+        :param obs: (str) observation exhibition text.
+        :return: (bool) whether selection was set.
+        """
+        self.obsComboBox.setCurrentText(obs)
+        return self.obsComboBox.currentText() == obs
+
+    def currentText(self):
+        """
+        Gets current text exhibited on combo box.
+        :return: (str) current text.
+        """
+        return self.obsComboBox.currentText()
+
     def refresh(self, obsList):
         """
         Resets widget to initial state.
